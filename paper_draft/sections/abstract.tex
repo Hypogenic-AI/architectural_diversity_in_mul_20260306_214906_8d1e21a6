@@ -1,0 +1,26 @@
+Multi-agent LLM systems increasingly power critical reasoning tasks, yet most deployments use
+homogeneous model ensembles that may share correlated failure modes.
+Classical ensemble theory predicts that agent diversity reduces correlated errors,
+but whether \emph{capability-level} diversity within a single model family provides
+measurable benefits remains an open empirical question.
+We study this question by constructing \advbench, a 30-question adversarial reasoning benchmark
+spanning five cognitive trap categories---misleading math, causal traps,
+logical deception, numerical tricks, and framing effects---and evaluating
+five experimental conditions using real API calls to \haiku and \sonnet models.
+Our conditions cover a diversity continuum from single agents, to homogeneous three-agent ensembles
+using majority voting, to heterogeneous ensembles mixing small and large models,
+and a structured debate protocol.
+We find that both individual models achieve high accuracy (93.3\%) on our benchmark,
+leaving little room for diversity-based improvement.
+Error correlation between the cross-capability \haiku--\sonnet pair
+($r{=}0.464$) is measurably lower than within-capability pairs ($r{=}0.695$),
+partially supporting the diversity hypothesis.
+However, heterogeneous ensembles match---rather than exceed---homogeneous ensembles
+at 96.7\% accuracy ($p{=}1.000$, McNemar), and the debate protocol
+slightly degrades performance due to sycophantic revision.
+The dominant shared failure mode is a safety-aligned refusal to recommend
+a surgery without full clinical context, shared identically across
+all five conditions.
+Our results suggest that within-family capability diversity alone is insufficient
+to overcome shared alignment properties, and that truly complementary failure modes
+require cross-family architectural diversity.

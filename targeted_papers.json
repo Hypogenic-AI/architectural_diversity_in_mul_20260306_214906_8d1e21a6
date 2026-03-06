@@ -1,0 +1,440 @@
+[
+  {
+    "title": "A Survey of Multi-Agent Deep Reinforcement Learning with Communication",
+    "authors": [
+      "Changxi Zhu",
+      "Mehdi Dastani",
+      "Shihan Wang"
+    ],
+    "year": 2022,
+    "arxiv_id": "2203.08975v2",
+    "abstract": "Communication is an effective mechanism for coordinating the behaviors of multiple agents, broadening their views of the environment, and to support their collaborations. In the field of multi-agent deep reinforcement learning (MADRL), agents can improve the overall learning performance and achieve their objectives by communication. Agents can communicate various types of messages, either to all agents or to specific agent groups, or conditioned on specific constraints. With the growing body of ",
+    "url": "https://arxiv.org/pdf/2203.08975v2"
+  },
+  {
+    "title": "Establishing Shared Query Understanding in an Open Multi-Agent System",
+    "authors": [
+      "Nikolaos Kondylidis",
+      "Ilaria Tiddi",
+      "Annette ten Teije"
+    ],
+    "year": 2023,
+    "arxiv_id": "2305.09349v1",
+    "abstract": "We propose a method that allows to develop shared understanding between two agents for the purpose of performing a task that requires cooperation. Our method focuses on efficiently establishing successful task-oriented communication in an open multi-agent system, where the agents do not know anything about each other and can only communicate via grounded interaction. The method aims to assist researchers that work on human-machine interaction or scenarios that require a human-in-the-loop, by def",
+    "url": "https://arxiv.org/pdf/2305.09349v1"
+  },
+  {
+    "title": "Design of Seamless Multi-modal Interaction Framework for Intelligent Virtual Agents in Wearable Mixed Reality Environment",
+    "authors": [
+      "Ghazanfar Ali",
+      "Hong-Quan Le",
+      "Junho Kim"
+    ],
+    "year": 2025,
+    "arxiv_id": "2503.19334v1",
+    "abstract": "In this paper, we present the design of a multimodal interaction framework for intelligent virtual agents in wearable mixed reality environments, especially for interactive applications at museums, botanical gardens, and similar places. These places need engaging and no-repetitive digital content delivery to maximize user involvement. An intelligent virtual agent is a promising mode for both purposes. Premises of framework is wearable mixed reality provided by MR devices supporting spatial mappi",
+    "url": "https://arxiv.org/pdf/2503.19334v1"
+  },
+  {
+    "title": "Mixtures of Experts Models",
+    "authors": [
+      "Isobel Claire Gormley",
+      "Sylvia Fr\u00fchwirth-Schnatter"
+    ],
+    "year": 2018,
+    "arxiv_id": "1806.08200v1",
+    "abstract": "Mixtures of experts models provide a framework in which covariates may be included in mixture models. This is achieved by modelling the parameters of the mixture model as functions of the concomitant covariates. Given their mixture model foundation, mixtures of experts models possess a diverse range of analytic uses, from clustering observations to capturing parameter heterogeneity in cross-sectional data. This chapter focuses on delineating the mixture of experts modelling framework and demonst",
+    "url": "https://arxiv.org/pdf/1806.08200v1"
+  },
+  {
+    "title": "Creating Multimodal Interactive Agents with Imitation and Self-Supervised Learning",
+    "authors": [
+      "DeepMind Interactive Agents Team",
+      "Josh Abramson",
+      "Arun Ahuja"
+    ],
+    "year": 2021,
+    "arxiv_id": "2112.03763v2",
+    "abstract": "A common vision from science fiction is that robots will one day inhabit our physical spaces, sense the world as we do, assist our physical labours, and communicate with us through natural language. Here we study how to design artificial agents that can interact naturally with humans using the simplification of a virtual environment. We show that imitation learning of human-human interactions in a simulated world, in conjunction with self-supervised learning, is sufficient to produce a multimoda",
+    "url": "https://arxiv.org/pdf/2112.03763v2"
+  },
+  {
+    "title": "Learning the Value Systems of Agents with Preference-based and Inverse Reinforcement Learning",
+    "authors": [
+      "Andr\u00e9s Holgado-S\u00e1nchez",
+      "Holger Billhardt",
+      "Alberto Fern\u00e1ndez"
+    ],
+    "year": 2026,
+    "arxiv_id": "2602.04518v1",
+    "abstract": "Agreement Technologies refer to open computer systems in which autonomous software agents interact with one another, typically on behalf of humans, in order to come to mutually acceptable agreements. With the advance of AI systems in recent years, it has become apparent that such agreements, in order to be acceptable to the involved parties, must remain aligned with ethical principles and moral values. However, this is notoriously difficult to ensure, especially as different human users (and the",
+    "url": "https://arxiv.org/pdf/2602.04518v1"
+  },
+  {
+    "title": "TRIZ Agents: A Multi-Agent LLM Approach for TRIZ-Based Innovation",
+    "authors": [
+      "Kamil Szczepanik",
+      "Jaros\u0142aw A. Chudziak"
+    ],
+    "year": 2025,
+    "arxiv_id": "2506.18783v1",
+    "abstract": "TRIZ, the Theory of Inventive Problem Solving, is a structured, knowledge-based framework for innovation and abstracting problems to find inventive solutions. However, its application is often limited by the complexity and deep interdisciplinary knowledge required. Advancements in Large Language Models (LLMs) have revealed new possibilities for automating parts of this process. While previous studies have explored single LLMs in TRIZ applications, this paper introduces a multi-agent approach. We",
+    "url": "https://arxiv.org/pdf/2506.18783v1"
+  },
+  {
+    "title": "Augmenting the action space with conventions to improve multi-agent cooperation in Hanabi",
+    "authors": [
+      "F. Bredell",
+      "H. A. Engelbrecht",
+      "J. C. Schoeman"
+    ],
+    "year": 2024,
+    "arxiv_id": "2412.06333v3",
+    "abstract": "The card game Hanabi is considered a strong medium for the testing and development of multi-agent reinforcement learning (MARL) algorithms, due to its cooperative nature, partial observability, limited communication and remarkable complexity. Previous research efforts have explored the capabilities of MARL algorithms within Hanabi, focusing largely on advanced architecture design and algorithmic manipulations to achieve state-of-the-art performance for various number of cooperators. However, thi",
+    "url": "https://arxiv.org/pdf/2412.06333v3"
+  },
+  {
+    "title": "ReConcile: Round-Table Conference Improves Reasoning via Consensus among Diverse LLMs",
+    "authors": [
+      "Justin Chih-Yao Chen",
+      "Swarnadeep Saha",
+      "Mohit Bansal"
+    ],
+    "year": 2023,
+    "arxiv_id": "2309.13007v3",
+    "abstract": "Large Language Models (LLMs) still struggle with natural language reasoning tasks. Motivated by the society of minds (Minsky, 1988), we propose ReConcile, a multi-model multi-agent framework designed as a round table conference among diverse LLM agents. ReConcile enhances collaborative reasoning between LLM agents via multiple rounds of discussion, learning to convince other agents to improve their answers, and employing a confidence-weighted voting mechanism that leads to a better consensus. In",
+    "url": "https://arxiv.org/pdf/2309.13007v3"
+  },
+  {
+    "title": "Summary of the ACAT Round Table Discussion: Open-source, knowledge sharing and scientific collaboration",
+    "authors": [
+      "Federico Carminati",
+      "Denis Perret-Gallix",
+      "Tord Riemann"
+    ],
+    "year": 2014,
+    "arxiv_id": "1407.0540v1",
+    "abstract": "Round table discussions are in the tradition of ACAT. This year's plenary round table discussion was devoted to questions related to the use of scientific software in High Energy Physics and beyond. The 90 minutes of discussion were lively, and quite a lot of diverse opinions were spelled out. Although the discussion was, in part, controversial, the participants agreed unanimously on several basic issues in software sharing: (i) The importance of having various licensing models in academic resea",
+    "url": "https://arxiv.org/pdf/1407.0540v1"
+  },
+  {
+    "title": "What are Quantum Fluctuations? Round Table of the Third Conference on Quantum Theory: Reconsideration of Foundations",
+    "authors": [
+      "Andrei Khrennikov",
+      "Guillaume Adenier",
+      "Theo M. Nieuwenhuizen"
+    ],
+    "year": 2006,
+    "arxiv_id": "quant-ph/0610052v1",
+    "abstract": "This is a transcript of the round table that took place during the conference Quantum Theory: Reconsideration of Foundations - 3, June 2005, Vaxjo, Sweden. There are presented opinions of leading experts in quantum foundations on such fundamental problems as the origin of quantum fluctuations and completeness of quantum mechanics.",
+    "url": "https://arxiv.org/pdf/quant-ph/0610052v1"
+  },
+  {
+    "title": "How do language models learn facts? Dynamics, curricula and hallucinations",
+    "authors": [
+      "Nicolas Zucchet",
+      "J\u00f6rg Bornschein",
+      "Stephanie Chan"
+    ],
+    "year": 2025,
+    "arxiv_id": "2503.21676v2",
+    "abstract": "Large language models accumulate vast knowledge during pre-training, yet the dynamics governing this acquisition remain poorly understood. This work investigates the learning dynamics of language models on a synthetic factual recall task, uncovering three key findings: First, language models learn in three phases, exhibiting a performance plateau before acquiring precise factual knowledge. Mechanistically, this plateau coincides with the formation of attention-based circuits that support recall.",
+    "url": "https://arxiv.org/pdf/2503.21676v2"
+  },
+  {
+    "title": "Round Table Discussion at the Final Session of FPCP 2008: The Future of Flavor Physics and CP",
+    "authors": [
+      "Jeffrey A. Appel",
+      "Jen-Feng Hsu",
+      "Hsiang-nan Li"
+    ],
+    "year": 2008,
+    "arxiv_id": "0809.3414v1",
+    "abstract": "The final session of FPCP 2008 consisted of a round-table discussion among panelists and audience. The panelists included Jeffrey Appel(moderator), Martin Beneke, George W.S. Hou, David Kirkby, Dmitri Tsybychev, Matt Wingate, and Taku Yamanaka. What follows is an edited transcript of the session.",
+    "url": "https://arxiv.org/pdf/0809.3414v1"
+  },
+  {
+    "title": "Round Table Summary: Stellar interferometry as a tool to investigate atmospheres and to compare observations with models",
+    "authors": [
+      "Markus Wittkowski"
+    ],
+    "year": 2003,
+    "arxiv_id": "astro-ph/0304044v1",
+    "abstract": "Long-baseline interferometry at optical and near-infrared wavelengths is an emerging technology which is quickly becoming a useful tool to investigate stellar atmospheres and to compare observations with models. Stellar atmosphere models have so far mainly been constrained by comparisons with stellar spectra which are integrated over the stellar disks. Interferometric observations provide spatially and spectrally resolved information and can thus provide important complementary observational inf",
+    "url": "https://arxiv.org/pdf/astro-ph/0304044v1"
+  },
+  {
+    "title": "Unforgettable Generalization in Language Models",
+    "authors": [
+      "Eric Zhang",
+      "Leshem Chosen",
+      "Jacob Andreas"
+    ],
+    "year": 2024,
+    "arxiv_id": "2409.02228v1",
+    "abstract": "When language models (LMs) are trained to forget (or \"unlearn'') a skill, how precisely does their behavior change? We study the behavior of transformer LMs in which tasks have been forgotten via fine-tuning on randomized labels. Such LMs learn to generate near-random predictions for individual examples in the \"training'' set used for forgetting. Across tasks, however, LMs exhibit extreme variability in whether LM predictions change on examples outside the training set. In some tasks (like entai",
+    "url": "https://arxiv.org/pdf/2409.02228v1"
+  },
+  {
+    "title": "Nuclear mass table in deformed relativistic Hartree-Bogoliubov theory in continuum, II: Even-$Z$ nuclei",
+    "authors": [
+      "DRHBc Mass Table Collaboration",
+      "Peng Guo",
+      "Xiaojie Cao"
+    ],
+    "year": 2024,
+    "arxiv_id": "2402.02935v4",
+    "abstract": "The mass table in the deformed relativistic Hartree-Bogoliubov theory in continuum (DRHBc) with the PC-PK1 density functional has been established for even-$Z$ nuclei with $8\\le Z\\le120$, extended from the previous work for even-even nuclei [Zhang $\\it{et.~al.}$ (DRHBc Mass Table Collaboration), At. Data Nucl. Data Tables 144, 101488 (2022)]. The calculated binding energies, two-nucleon and one-neutron separation energies, root-mean-square (rms) radii of neutron, proton, matter, and charge distr",
+    "url": "https://arxiv.org/pdf/2402.02935v4"
+  },
+  {
+    "title": "A Methodology to Engineer and Validate Dynamic Multi-level Multi-agent Based Simulations",
+    "authors": [
+      "Jean-Baptiste Soyez",
+      "Gildas Morvan",
+      "Daniel Dupont"
+    ],
+    "year": 2013,
+    "arxiv_id": "1311.5108v1",
+    "abstract": "This article proposes a methodology to model and simulate complex systems, based on IRM4MLS, a generic agent-based meta-model able to deal with multi-level systems. This methodology permits the engineering of dynamic multi-level agent-based models, to represent complex systems over several scales and domains of interest. Its goal is to simulate a phenomenon using dynamically the lightest representation to save computer resources without loss of information. This methodology is based on two mecha",
+    "url": "https://arxiv.org/pdf/1311.5108v1"
+  },
+  {
+    "title": "AOAD-MAT: Transformer-based multi-agent deep reinforcement learning model considering agents' order of action decisions",
+    "authors": [
+      "Shota Takayama",
+      "Katsuhide Fujita"
+    ],
+    "year": 2025,
+    "arxiv_id": "2510.13343v1",
+    "abstract": "Multi-agent reinforcement learning focuses on training the behaviors of multiple learning agents that coexist in a shared environment. Recently, MARL models, such as the Multi-Agent Transformer (MAT) and ACtion dEpendent deep Q-learning (ACE), have significantly improved performance by leveraging sequential decision-making processes. Although these models can enhance performance, they do not explicitly consider the importance of the order in which agents make decisions. In this paper, we propose",
+    "url": "https://arxiv.org/pdf/2510.13343v1"
+  },
+  {
+    "title": "Context Engineering for Multi-Agent LLM Code Assistants Using Elicit, NotebookLM, ChatGPT, and Claude Code",
+    "authors": [
+      "Muhammad Haseeb"
+    ],
+    "year": 2025,
+    "arxiv_id": "2508.08322v1",
+    "abstract": "Large Language Models (LLMs) have shown promise in automating code generation and software engineering tasks, yet they often struggle with complex, multi-file projects due to context limitations and knowledge gaps. We propose a novel context engineering workflow that combines multiple AI components: an Intent Translator (GPT-5) for clarifying user requirements, an Elicit-powered semantic literature retrieval for injecting domain knowledge, NotebookLM-based document synthesis for contextual under",
+    "url": "https://arxiv.org/pdf/2508.08322v1"
+  },
+  {
+    "title": "MedAide: Information Fusion and Anatomy of Medical Intents via LLM-based Agent Collaboration",
+    "authors": [
+      "Dingkang Yang",
+      "Jinjie Wei",
+      "Mingcheng Li"
+    ],
+    "year": 2024,
+    "arxiv_id": "2410.12532v3",
+    "abstract": "In healthcare intelligence, the ability to fuse heterogeneous, multi-intent information from diverse clinical sources is fundamental to building reliable decision-making systems. Large Language Model (LLM)-driven information interaction systems currently showing potential promise in the healthcare domain. Nevertheless, they often suffer from information redundancy and coupling when dealing with complex medical intents, leading to severe hallucinations and performance bottlenecks. To this end, we",
+    "url": "https://arxiv.org/pdf/2410.12532v3"
+  },
+  {
+    "title": "SWE-Debate: Competitive Multi-Agent Debate for Software Issue Resolution",
+    "authors": [
+      "Han Li",
+      "Yuling Shi",
+      "Shaoxin Lin"
+    ],
+    "year": 2025,
+    "arxiv_id": "2507.23348v1",
+    "abstract": "Issue resolution has made remarkable progress thanks to the advanced reasoning capabilities of large language models (LLMs). Recently, agent-based frameworks such as SWE-agent have further advanced this progress by enabling autonomous, tool-using agents to tackle complex software engineering tasks. While existing agent-based issue resolution approaches are primarily based on agents' independent explorations, they often get stuck in local solutions and fail to identify issue patterns that span ac",
+    "url": "https://arxiv.org/pdf/2507.23348v1"
+  },
+  {
+    "title": "Small LLMs Are Weak Tool Learners: A Multi-LLM Agent",
+    "authors": [
+      "Weizhou Shen",
+      "Chenliang Li",
+      "Hongzhan Chen"
+    ],
+    "year": 2024,
+    "arxiv_id": "2401.07324v3",
+    "abstract": "Large Language Model (LLM) agents significantly extend the capabilities of standalone LLMs, empowering them to interact with external tools (e.g., APIs, functions) and complete various tasks in a self-directed fashion. The challenge of tool use demands that LLMs not only understand user queries and generate answers accurately but also excel in task planning, tool invocation, and result summarization. While traditional works focus on training a single LLM with all these capabilities, performance ",
+    "url": "https://arxiv.org/pdf/2401.07324v3"
+  },
+  {
+    "title": "Harnessing Multiple Large Language Models: A Survey on LLM Ensemble",
+    "authors": [
+      "Zhijun Chen",
+      "Jingzheng Li",
+      "Pengpeng Chen"
+    ],
+    "year": 2025,
+    "arxiv_id": "2502.18036v5",
+    "abstract": "LLM Ensemble -- which involves the comprehensive use of multiple large language models (LLMs), each aimed at handling user queries during downstream inference, to benefit from their individual strengths -- has gained substantial attention recently. The widespread availability of LLMs, coupled with their varying strengths and out-of-the-box usability, has profoundly advanced the field of LLM Ensemble. This paper presents the first systematic review of recent developments in LLM Ensemble. First, w",
+    "url": "https://arxiv.org/pdf/2502.18036v5"
+  },
+  {
+    "title": "ESDF: Ensemble Selection using Diversity and Frequency",
+    "authors": [
+      "Shouvick Mondal",
+      "Arko Banerjee"
+    ],
+    "year": 2015,
+    "arxiv_id": "1508.04333v1",
+    "abstract": "Recently ensemble selection for consensus clustering has emerged as a research problem in Machine Intelligence. Normally consensus clustering algorithms take into account the entire ensemble of clustering, where there is a tendency of generating a very large size ensemble before computing its consensus. One can avoid considering the entire ensemble and can judiciously select few partitions in the ensemble without compromising on the quality of the consensus. This may result in an efficient conse",
+    "url": "https://arxiv.org/pdf/1508.04333v1"
+  },
+  {
+    "title": "Vendi-RAG: Adaptively Trading-Off Diversity And Quality Significantly Improves Retrieval Augmented Generation With LLMs",
+    "authors": [
+      "Mohammad Reza Rezaei",
+      "Adji Bousso Dieng"
+    ],
+    "year": 2025,
+    "arxiv_id": "2502.11228v2",
+    "abstract": "Retrieval-augmented generation (RAG) enhances large language models (LLMs) for domain-specific question-answering (QA) tasks by leveraging external knowledge sources. However, traditional RAG systems primarily focus on relevance-based retrieval and often struggle with redundancy, especially when reasoning requires connecting information from multiple sources. This paper introduces Vendi-RAG, a framework based on an iterative process that jointly optimizes retrieval diversity and answer quality. ",
+    "url": "https://arxiv.org/pdf/2502.11228v2"
+  },
+  {
+    "title": "Secrecy and Verifiability: An Introduction to Electronic Voting",
+    "authors": [
+      "Paul Keeler",
+      "Ben Smyth"
+    ],
+    "year": 2026,
+    "arxiv_id": "2602.12398v1",
+    "abstract": "Democracies are built upon secure and reliable voting systems. Electronic voting systems seek to replace ballot papers and boxes with computer hardware and software. Proposed electronic election schemes have been subjected to scrutiny, with researchers spotting inherent faults and weaknesses. Inspired by physical voting systems, we argue that any electronic voting system needs two essential properties: ballot secrecy and verifiability. These properties seemingly work against each other. An elect",
+    "url": "https://arxiv.org/pdf/2602.12398v1"
+  },
+  {
+    "title": "Multi-Winner Voting with Approval Preferences",
+    "authors": [
+      "Martin Lackner",
+      "Piotr Skowron"
+    ],
+    "year": 2020,
+    "arxiv_id": "2007.01795v5",
+    "abstract": "Multi-winner voting is the process of selecting a fixed-size set of representative candidates based on voters' preferences. It occurs in applications ranging from politics (parliamentary elections) to the design of modern computer applications (collaborative filtering, dynamic Q&A platforms, diversifying search results). All these applications share the problem of identifying a representative subset of alternatives -- and the study of multi-winner voting is the principled analysis of this task.\n",
+    "url": "https://arxiv.org/pdf/2007.01795v5"
+  },
+  {
+    "title": "Nash Equilbria for Quadratic Voting",
+    "authors": [
+      "Steven P. Lalley",
+      "E. Glen Weyl"
+    ],
+    "year": 2014,
+    "arxiv_id": "1409.0264v6",
+    "abstract": "Voters making a binary decision purchase votes from a centralized clearing house, paying the square of the number of votes purchased. The net payoff to an agent with utility $u$ who purchases $v$ votes is $\u03a8(S_{n+1})u-v^{2}$, where $\u03a8$ is a monotone function taking values between -1 and +1 and $S_{n+1}$ is the sum of all votes purchased by the $n+1$ voters participating in the election. The utilities of the voters are assumed to arise by random sampling from a probability distribution $F_{U}$ wi",
+    "url": "https://arxiv.org/pdf/1409.0264v6"
+  },
+  {
+    "title": "Diverse LLMs or Diverse Question Interpretations? That is the Ensembling Question",
+    "authors": [
+      "Rafael Rosales",
+      "Santiago Miret"
+    ],
+    "year": 2025,
+    "arxiv_id": "2507.21168v1",
+    "abstract": "Effectively leveraging diversity has been shown to improve performance for various machine learning models, including large language models (LLMs). However, determining the most effective way of using diversity remains a challenge. In this work, we compare two diversity approaches for answering binary questions using LLMs: model diversity, which relies on multiple models answering the same question, and question interpretation diversity, which relies on using the same model to answer the same qu",
+    "url": "https://arxiv.org/pdf/2507.21168v1"
+  },
+  {
+    "title": "LLM-TOPLA: Efficient LLM Ensemble by Maximising Diversity",
+    "authors": [
+      "Selim Furkan Tekin",
+      "Fatih Ilhan",
+      "Tiansheng Huang"
+    ],
+    "year": 2024,
+    "arxiv_id": "2410.03953v1",
+    "abstract": "Combining large language models during training or at inference time has shown substantial performance gain over component LLMs. This paper presents LLM-TOPLA, a diversity-optimized LLM ensemble method with three unique properties: (i) We introduce the focal diversity metric to capture the diversity-performance correlation among component LLMs of an ensemble. (ii) We develop a diversity-optimized ensemble pruning algorithm to select the top-k sub-ensembles from a pool of $N$ base LLMs. Our pruni",
+    "url": "https://arxiv.org/pdf/2410.03953v1"
+  },
+  {
+    "title": "Self induced class stratification in competitive societies of agents: Nash stability in the presence of envy",
+    "authors": [
+      "Claudius Gros"
+    ],
+    "year": 2020,
+    "arxiv_id": "2005.11966v1",
+    "abstract": "Envy, the inclination to compare rewards, can be expected to unfold when inequalities in terms of payoff differences are generated in competitive societies. It is shown that increasing levels of envy lead inevitably to a self-induced separation into a lower and an upper class. Class stratification is Nash stable and strict, with members of the same class receiving identical rewards. Upper class agents play exclusively pure strategies, all lower class agents the same mixed strategy. The fraction ",
+    "url": "https://arxiv.org/pdf/2005.11966v1"
+  },
+  {
+    "title": "Navigating the State of Cognitive Flow: Context-Aware AI Interventions for Effective Reasoning Support",
+    "authors": [
+      "Dinithi Dissanayake",
+      "Suranga Nanayakkara"
+    ],
+    "year": 2025,
+    "arxiv_id": "2504.16021v1",
+    "abstract": "Flow theory describes an optimal cognitive state where individuals experience deep focus and intrinsic motivation when a task's difficulty aligns with their skill level. In AI-augmented reasoning, interventions that disrupt the state of cognitive flow can hinder rather than enhance decision-making. This paper proposes a context-aware cognitive augmentation framework that adapts interventions based on three key contextual factors: type, timing, and scale. By leveraging multimodal behavioral cues ",
+    "url": "https://arxiv.org/pdf/2504.16021v1"
+  },
+  {
+    "title": "Hierarchical Multi-agent Large Language Model Reasoning for Autonomous Functional Materials Discovery",
+    "authors": [
+      "Samuel Rothfarb",
+      "Megan C. Davis",
+      "Ivana Matanovic"
+    ],
+    "year": 2025,
+    "arxiv_id": "2512.13930v1",
+    "abstract": "Artificial intelligence is reshaping scientific exploration, but most methods automate procedural tasks without engaging in scientific reasoning, limiting autonomy in discovery. We introduce Materials Agents for Simulation and Theory in Electronic-structure Reasoning (MASTER), an active learning framework where large language models autonomously design, execute, and interpret atomistic simulations. In MASTER, a multimodal system translates natural language into density functional theory workflow",
+    "url": "https://arxiv.org/pdf/2512.13930v1"
+  },
+  {
+    "title": "ARS: Adaptive Reasoning Suppression for Efficient Large Reasoning Language Models",
+    "authors": [
+      "Dongqi Zheng"
+    ],
+    "year": 2025,
+    "arxiv_id": "2510.00071v2",
+    "abstract": "Large Reasoning Language Models (LRLMs or LRMs) demonstrate remarkable capabilities in complex reasoning tasks, but suffer from significant computational inefficiencies due to overthinking phenomena. Existing efficient reasoning methods face the challenge of balancing reasoning quality with inference cost reduction. We propose \\textbf{Adaptive Reasoning Suppression (ARS)}, a novel training-free approach that dynamically suppresses redundant reasoning steps while preserving accuracy through adapt",
+    "url": "https://arxiv.org/pdf/2510.00071v2"
+  },
+  {
+    "title": "Agentic Reasoning for Large Language Models",
+    "authors": [
+      "Tianxin Wei",
+      "Ting-Wei Li",
+      "Zhining Liu"
+    ],
+    "year": 2026,
+    "arxiv_id": "2601.12538v1",
+    "abstract": "Reasoning is a fundamental cognitive process underlying inference, problem-solving, and decision-making. While large language models (LLMs) demonstrate strong reasoning capabilities in closed-world settings, they struggle in open-ended and dynamic environments. Agentic reasoning marks a paradigm shift by reframing LLMs as autonomous agents that plan, act, and learn through continual interaction. In this survey, we organize agentic reasoning along three complementary dimensions. First, we charact",
+    "url": "https://arxiv.org/pdf/2601.12538v1"
+  },
+  {
+    "title": "Cognitive Architectures for Language Agents",
+    "authors": [
+      "Theodore R. Sumers",
+      "Shunyu Yao",
+      "Karthik Narasimhan"
+    ],
+    "year": 2023,
+    "arxiv_id": "2309.02427v3",
+    "abstract": "Recent efforts have augmented large language models (LLMs) with external resources (e.g., the Internet) or internal control flows (e.g., prompt chaining) for tasks requiring grounding or reasoning, leading to a new class of language agents. While these agents have achieved substantial empirical success, we lack a systematic framework to organize existing agents and plan future developments. In this paper, we draw on the rich history of cognitive science and symbolic artificial intelligence to pr",
+    "url": "https://arxiv.org/pdf/2309.02427v3"
+  },
+  {
+    "title": "Making Large Language Models Better Reasoners with Alignment",
+    "authors": [
+      "Peiyi Wang",
+      "Lei Li",
+      "Liang Chen"
+    ],
+    "year": 2023,
+    "arxiv_id": "2309.02144v1",
+    "abstract": "Reasoning is a cognitive process of using evidence to reach a sound conclusion. The reasoning capability is essential for large language models (LLMs) to serve as the brain of the artificial general intelligence agent. Recent studies reveal that fine-tuning LLMs on data with the chain of thought (COT) reasoning process can significantly enhance their reasoning capabilities. However, we find that the fine-tuned LLMs suffer from an \\textit{Assessment Misalignment} problem, i.e., they frequently as",
+    "url": "https://arxiv.org/pdf/2309.02144v1"
+  },
+  {
+    "title": "Theory of Mind for Explainable Human-Robot Interaction",
+    "authors": [
+      "Marie S. Bauer",
+      "Julia Gachot",
+      "Matthias Kerzel"
+    ],
+    "year": 2025,
+    "arxiv_id": "2512.23482v3",
+    "abstract": "Within the context of human-robot interaction (HRI), Theory of Mind (ToM) is intended to serve as a user-friendly backend to the interface of robotic systems, enabling robots to infer and respond to human mental states. When integrated into robots, ToM allows them to adapt their internal models to users' behaviors, enhancing the interpretability and predictability of their actions. Similarly, Explainable Artificial Intelligence (XAI) aims to make AI systems transparent and interpretable, allowin",
+    "url": "https://arxiv.org/pdf/2512.23482v3"
+  }
+]

@@ -1,0 +1,1129 @@
+You are an academic paper writer. Generate a complete NEURIPS style paper
+based on the experiment results provided.
+
+════════════════════════════════════════════════════════════════════════════════
+                         IMPORTANT: BEFORE YOU START
+════════════════════════════════════════════════════════════════════════════════
+
+Before writing any content, you MUST complete these steps:
+
+1. READ THE SKILL: Review the paper-writer skill at .claude/skills/paper-writer/SKILL.md
+2. READ THE STYLE GUIDE: Study templates/paper_writing/lab_style_guide.md carefully
+3. REVIEW EXAMPLES: Browse paper_examples/ for formatting and language patterns:
+   - Look at sections/1.introduction.tex for language style
+   - Look at tables/*.tex for table formatting
+   - Look at commands/*.tex for macro usage
+4. VERIFY COMMAND TEMPLATES: Command templates (math.tex, general.tex, macros.tex) are pre-copied to paper_draft/commands/
+
+CRITICAL: Reference example papers for FORMATTING and LANGUAGE STYLE only.
+Do NOT copy content, phrasing, or narrative structure from the example papers.
+The examples are in a different research domain - focus only on presentation style.
+
+════════════════════════════════════════════════════════════════════════════════
+                            EXPERIMENT REPORT
+════════════════════════════════════════════════════════════════════════════════
+
+# Architectural Diversity in Multi-Agent LLM Systems for Robust Collective Reasoning
+
+## 1. Executive Summary
+
+This study investigates whether capability-level diversity (heterogeneous model sizes) within the Claude model family provides measurable benefits for adversarial reasoning tasks compared to homogeneous ensembles. Using 30 adversarially-designed reasoning questions across 5 cognitive trap categories, we evaluated 5 experimental conditions with real Claude API calls. **Key finding**: Modern large language models (Claude Haiku and Claude Sonnet) achieve very high accuracy (93-97%) on classical adversarial reasoning tasks, with highly correlated failure modes (r=0.46-1.00), leaving minimal room for diversity-based improvement. Heterogeneous ensembles show the same accuracy as homogeneous ones (96.7%), debate protocols slightly degrade performance, and the primary shared failure mode is systematic over-caution in medical recommendation scenarios.
+
+---
+
+## 2. Goal
+
+**Research Question**: Do multi-agent LLM systems with capability-level diversity (heterogeneous model sizes: claude-haiku-4-5 vs. claude-sonnet-4-6) demonstrate superior robustness on adversarially-designed ambiguous reasoning tasks compared to homogeneous ensembles, due to reduced correlated error rates?
+
+**Hypothesis**: H1 — Heterogeneous ensembles achieve higher accuracy than homogeneous ensembles. H2 — Error correlation is lower between haiku-sonnet pairs than haiku-haiku pairs. H3 — Structured debate improves accuracy. H4 — Heterogeneous ensembles are more robust under paraphrase perturbation.
+
+**Motivation**: Multi-agent LLM systems increasingly power critical reasoning tasks, yet most deploy homogeneous model ensembles that may share failure modes. Classical ensemble theory predicts that diversity reduces correlated errors (negative correlation learning, Wu et al. 2023). The question of whether this extends to LLMs — and at what granularity of diversity — is a key open problem.
+
+---
+
+## 3. Data Construction
+
+### Adversarial Benchmark Design
+
+We created a custom 30-question adversarial reasoning benchmark across 5 categories (6 questions each):
+
+| Category | Design Principle | Example |
+|----------|-----------------|---------|
+| **Misleading Math** | Surface pattern gives wrong answer | Bat-ball ($1.10 total, bat costs $1 more → ball = $0.05 not $0.10) |
+| **Causal Traps** | Correlation/causation confusion, Simpson&#39;s paradox | Hospital with higher death rate may be better (severity confounding) |
+| **Logical Deception** | Multi-step puzzles with misleading surface patterns | Knight-knave variants, rope-burning timing, box labeling |
+| **Numerical Tricks** | Base rate neglect, anchoring, harmonic vs. arithmetic mean | Medical test base rate (99% accurate test → ~50% PPV at 1% prevalence) |
+| **Framing Effects** | Gain vs. loss framing on equivalent scenarios | 90% survival vs. 10% mortality — same surgery, different recommendation |
+
+Plus 6 paraphrase variants of selected questions for robustness testing.
+
+### Example Questions
+
+**Q1 (Misleading Math)**:
+&gt; &#34;A bat and a ball together cost $1.10. The bat costs exactly $1.00 more than the ball. How much does the ball cost in cents?&#34;
+&gt; Correct: 5 cents. Misleading: 10 cents (naive subtraction)
+
+**Q7 (Causal Traps)**:
+&gt; &#34;Hospital A has a 2% death rate; Hospital B has a 1% death rate. Should you choose Hospital B?&#34;
+&gt; Correct: NO (Simpson&#39;s paradox — A treats sicker patients). Misleading: YES
+
+**Q19 (Numerical Tricks)**:
+&gt; &#34;1% of people have Disease X. Test is 99% accurate. You test positive. Probability you have the disease?&#34;
+&gt; Correct: ~50% (Bayes). Misleading: 99% (ignoring base rate)
+
+### Data Quality
+
+- All 30 questions have clear ground-truth answers (verified by derivation)
+- 2 questions (Q17 rope puzzle, Q18 switch puzzle) require procedural free-text answers; evaluated using content-based matching
+- Q23 (exponential doubling) revealed an ambiguity in &#34;exceed&#34; interpretation (strictly &gt; vs. ≥); both &#34;100 years&#34; and &#34;120 years&#34; are defensible
+- API key interruption at question 15; resumed; all 30 completed
+- Total API calls: ~310 (30 questions × ~8 calls + 6 paraphrases × ~4 calls)
+
+---
+
+## 4. Experiment Description
+
+### Methodology
+
+We compare 5 experimental conditions representing a diversity continuum:
+
+| Condition | Description | Agents | Aggregation |
+|-----------|-------------|--------|-------------|
+| **Single Haiku** | One claude-haiku-4-5 agent | 1 | Direct answer |
+| **Single Sonnet** | One claude-sonnet-4-6 agent | 1 | Direct answer |
+| **Homogeneous Haiku (3×)** | Three haiku agents | 3 | Majority vote |
+| **Heterogeneous (2H+1S)** | Two haiku + one sonnet | 3 | Majority vote |
+| **Debate (H→S→H)** | Haiku proposes, Sonnet critiques, Haiku revises | 2 | Final haiku answer |
+
+### Implementation Details
+
+**Tools and Libraries:**
+| Library | Version |
+|---------|---------|
+| anthropic | 0.52+ |
+| numpy | 1.26+ |
+| scipy | 1.13+ |
+| matplotlib | 3.8+ |
+| Python | 3.12.8 |
+
+**Models:**
+- Small: `claude-haiku-4-5-20251001` — fast, cost-efficient
+- Large: `claude-sonnet-4-6` — more capable, slower
+
+**Hyperparameters:**
+| Parameter | Value | Rationale |
+|-----------|-------|-----------|
+| Temperature | 0.0 | Deterministic, reproducible |
+| Max tokens | 512 | Sufficient for CoT reasoning |
+| Retries | 3 | Handle transient API errors |
+| Inter-call delay | 0.3-0.5s | Rate limit compliance |
+
+**Prompting Strategy:**
+- System prompt encourages identifying misleading patterns and step-by-step reasoning
+- Agents instructed to state `FINAL ANSWER:` clearly
+- Debate: Haiku proposes → Sonnet critiques (with `CRITIC_SYSTEM` prompt) → Haiku revises (with `REVISER_SYSTEM` prompt)
+
+**Random seed**: 42 (set for numpy/random); model calls at temperature=0
+
+**Hardware**: CPU only (no GPU), Linux, 2 CPU cores. API latency ~2-5s/call.
+
+**Execution time**: ~33 minutes total (25 min original, 8 min paraphrase + 15 min resume after API interruption)
+
+### Evaluation Metrics
+
+1. **Task Accuracy**: Fraction of questions answered correctly; primary metric
+2. **Error Correlation (Pearson r)**: Correlation between binary error vectors of two conditions; lower = more diverse failure modes
+3. **Debate Improvement Rate**: Fraction of questions where debate protocol improved over haiku baseline
+4. **Adversarial Robustness**: Accuracy drop between original questions and paraphrase variants
+
+### Statistical Analysis
+
+- **Bootstrap 95% CI**: 1000 resamplings for accuracy confidence intervals
+- **McNemar&#39;s test**: Paired comparison of accuracy differences between conditions (n=30)
+- **Pearson correlation**: For pairwise error vector correlation
+
+---
+
+## 5. Raw Results
+
+### Overall Accuracy
+
+| Condition | Correct/Total | Accuracy | 95% CI |
+|-----------|---------------|----------|--------|
+| Single Haiku | 28/30 | 93.3% | [77.5%, 100%] |
+| Single Sonnet | 28/30 | 93.3% | [77.5%, 100%] |
+| Homogeneous Haiku (3×) | 29/30 | 96.7% | [83.3%, 100%] |
+| **Heterogeneous (2H+1S)** | **29/30** | **96.7%** | **[83.3%, 100%]** |
+| Debate (H→S→H) | 28/30 | 93.3% | [77.5%, 100%] |
+
+### Per-Category Accuracy
+
+| Category | Single H | Single S | Homog. H | Hetero. | Debate |
+|----------|----------|----------|----------|---------|--------|
+| Misleading Math | 100% | 100% | 100% | 100% | 100% |
+| Causal Traps | 100% | 100% | 100% | 100% | 100% |
+| Logical Deception | 83% | 83% | 83% | 83% | 83% |
+| Numerical Tricks | 100% | 83% | 100% | 100% | 83% |
+| Framing Effects | 83% | 83% | 83% | 83% | 83% |
+
+### Error Correlation Matrix
+
+| Pair | Pearson r | p-value |
+|------|-----------|---------|
+| Single Haiku ↔ Single Sonnet | **0.464** | 0.010 |
+| Single Haiku ↔ Homog. Haiku | 0.695 | 0.000 |
+| Single Haiku ↔ Heterogeneous | 0.695 | 0.000 |
+| Single Sonnet ↔ Homog. Haiku | 0.695 | 0.000 |
+| Single Sonnet ↔ Heterogeneous | 0.695 | 0.000 |
+| Homog. Haiku ↔ Heterogeneous | **1.000** | 0.000 |
+
+### Debate Outcomes (30 questions)
+
+| Outcome | Count |
+|---------|-------|
+| Maintained Correct | 28 |
+| Improved (Wrong → Right) | 0 |
+| **Degraded (Right → Wrong)** | **1** |
+| Maintained Wrong | 1 |
+| Answers Changed | 9 |
+
+### Robustness (Original vs. Paraphrase, n=6)
+
+| Condition | Original Acc. | Paraphrase Acc. | Δ |
+|-----------|---------------|-----------------|---|
+| Single Haiku | 93.3% | ~83% (5/6) | -10pp |
+| Single Sonnet | 93.3% | ~83% (5/6) | -10pp |
+| Homog. Haiku | 96.7% | ~83% (5/6) | -14pp |
+| Heterogeneous | 96.7% | ~83% (5/6) | -14pp |
+
+*Note: Paraphrase set is only 6 questions; estimates have high uncertainty.*
+
+### Failure Analysis
+
+Only 3 questions had any failures:
+
+| Q | Category | Description | Which Conditions Fail |
+|---|----------|-------------|----------------------|
+| Q18 | Logical Deception | Light switch heat puzzle | Single Haiku only |
+| Q23 | Numerical Tricks | Population doubling (ambiguous &#34;exceed&#34;) | Single Sonnet, Debate |
+| Q27 | Framing Effects | 90% survival rate surgery | **All 5 conditions** |
+
+**Q18 insight**: Haiku fails to identify the heat-as-information insight (&#34;warm bulb = switch was recently on&#34;). Sonnet correctly identifies this. However, haiku&#39;s full reasoning does mention warmth in prose — only its final answer extraction misses it.
+
+**Q23 insight**: This question contains a genuine ambiguity: &#34;first exceed 32,000&#34; can mean ≥32,000 (100 years, 2^5=32) or &gt;32,000 strictly (120 years, 2^6=64). Haiku chooses the looser interpretation (100), sonnet chooses the stricter one (120). My benchmark marked 100 as correct, making this a benchmark design flaw.
+
+**Q27 insight**: &#34;A surgery has a 90% survival rate. Would you recommend it?&#34; — All Claude variants refuse to recommend without knowing the underlying condition, representing a **systematic shared safety-aligned bias** across model sizes. This illustrates that within-family LLMs share not only knowledge but also safety alignment properties.
+
+### Output Files
+
+- Raw results: `results/raw_results_final.json`
+- Analysis statistics: `results/analysis_results.json`
+- Plots: `results/plots/`
+
+---
+
+## 6. Result Analysis
+
+### Key Findings
+
+**Finding 1: Modern Claude models are highly robust to classical adversarial reasoning traps.**
+Both haiku (smaller) and sonnet (larger) achieve 93.3% accuracy on our adversarial benchmark, outperforming typical human accuracy on these cognitive trap tasks. This is consistent with the general trend of LLMs surpassing humans on classical reasoning benchmarks when fine-tuned with RLHF (Li et al. 2025).
+
+**Finding 2: Error correlation between haiku and sonnet is moderate (r=0.464), lower than within-condition correlations.**
+The Haiku-Sonnet pair has lower error correlation (r=0.464, p=0.010) than the Haiku-Homogeneous Haiku pair (r=0.695), which is consistent with H2 — different capability levels do have somewhat different failure modes. However, the absolute error count is too low (1-2 errors each) to draw strong conclusions.
+
+**Finding 3: Ensemble methods provide marginal but non-significant accuracy improvements.**
+Both Homogeneous Haiku (3×) and Heterogeneous (2H+1S) reach 96.7% vs. 93.3% for single agents, but McNemar tests show p=1.000 (no significant difference, given only 1-2 discordant pairs). The tiny sample makes statistical inference unreliable. The improvement (1 additional correct answer) comes from haiku majority preventing sonnet&#39;s wrong answer on Q23.
+
+**Finding 4: The debate protocol degraded performance.**
+The H→S→H debate protocol achieved the same accuracy as single models (28/30=93.3%) but caused 1 degradation (Q23: haiku was correct, sonnet&#39;s critique convinced haiku to adopt sonnet&#39;s incorrect but more careful interpretation). 9 of 30 answers changed during debate, demonstrating the protocol can alter responses, but without accuracy benefit. This aligns with the &#34;agreeability&#34; problem identified by Du et al. (2023) — RLHF-trained models tend to accept critique even when they were originally correct.
+
+**Finding 5: Systematic shared bias is the dominant failure mode.**
+Q27 (surgery recommendation) reveals that all conditions share a common safety-aligned refusal to recommend without full clinical context. This shared bias is MORE harmful than uncorrelated random errors, as no ensemble method can overcome it. This supports the core thesis of Rosales et al. (2025): for model diversity to help, models need truly complementary failure modes, not just independent sampling.
+
+### Hypothesis Testing Results
+
+| Hypothesis | Result | Evidence |
+|------------|--------|----------|
+| H1: Hetero. &gt; Homog. accuracy | **Not confirmed** (p=1.000) | 96.7% = 96.7%; 1 additional correct question each |
+| H2: Haiku-Sonnet error correlation &lt; Haiku-Haiku | **Partially confirmed** | r=0.464 vs r=0.695; statistically significant (p=0.010) |
+| H3: Debate improves accuracy | **Refuted** | 0 improvements, 1 degradation |
+| H4: Hetero. more robust under paraphrase | **Not confirmed** | Both drop equally (83% paraphrase) |
+
+### Error Analysis — Why Models Fail Together
+
+The correlated failure on Q27 reveals a critical insight: **within-family models share not just capabilities but aligned safety behaviors**. Claude haiku and sonnet are both trained by Anthropic with similar RLHF principles, making their safety-aligned refusals correlated. This is distinct from capability-based diversity — safety alignment is a cross-cutting concern that cannot be addressed by scaling model size.
+
+### Diversity Index
+
+| Pair Type | Error Correlation | Diversity Index (1-r) |
+|-----------|-------------------|----------------------|
+| Haiku-Haiku (same model) | r=0.695 | 0.305 |
+| Haiku-Sonnet (cross-capability) | r=0.464 | 0.536 |
+
+The heterogeneous (haiku-sonnet) pairing does show higher diversity index (0.536 vs. 0.305), partially supporting the theoretical prediction. However, with only 2 errors per condition, this diversity does not translate to measurable ensemble accuracy improvement.
+
+### Surprises and Insights
+
+1. **Modern LLMs are resistant to classical cognitive traps**: We expected ~60-70% accuracy; actual accuracy was 93-97%. The benchmark was not adversarial enough for 2026-era Claude models.
+
+2. **Debate can hurt, not just help**: The critique from sonnet convinced haiku to change a correct answer. This &#34;sycophantic revision&#34; problem is documented in literature (Du et al. 2023) but was expected to be mitigated by the Haiku-proposes-first structure. Instead, haiku readily adopted sonnet&#39;s more cautious (wrong) interpretation.
+
+3. **Q23 revealed benchmark ambiguity**: &#34;First exceed&#34; is genuinely ambiguous between ≥ and &gt;. Sonnet&#39;s more careful reading of &#34;exceed&#34; as strict inequality was arguably more linguistically precise. This highlights the importance of unambiguous adversarial question design.
+
+4. **Heterogeneous voting actually helped via haiku majority**: In Q23, the 2-haiku majority in the heterogeneous ensemble correctly overruled sonnet&#39;s minority interpretation. This is a case where majority voting protected against a stronger model&#39;s overcautious reasoning — the opposite of the expected &#34;wisdom of stronger models&#34; effect.
+
+### Limitations
+
+1. **Small benchmark (n=30)**: With only 1-2 failures per condition, all statistical tests are severely underpowered. Effect sizes cannot be meaningfully estimated.
+
+2. **Within-family diversity only**: We only compared claude-haiku-4-5 vs. claude-sonnet-4-6 due to single API key availability. Cross-family diversity (Claude vs. GPT vs. LLaMA) would test the core architectural diversity hypothesis more rigorously.
+
+3. **Classical adversarial tasks may be saturated**: Modern LLMs trained on internet-scale data have likely seen most classical cognitive trap problems. Truly novel adversarial tasks (unseen in training) would better test the hypothesis.
+
+4. **Temperature=0 reduces sampling diversity**: For homogeneous ensemble experiments, temperature=0 with the same model likely produces identical or near-identical responses, making the 3× ensemble effectively equivalent to single-shot sampling. Higher temperatures would introduce productive within-model diversity.
+
+5. **Evaluation challenges for open-ended answers**: Questions requiring procedural reasoning (Q17, Q18) required content-based evaluation that may miss semantic equivalences.
+
+6. **API key interruption**: The API key expired midway through experiments; the second half was completed in a separate session. While results appeared consistent, this introduces a minor confound.
+
+---
+
+## 7. Conclusions
+
+### Summary
+
+Within the Claude model family, capability-level diversity (small vs. large model) provides **modest but statistically insignificant accuracy improvements** on our adversarial reasoning benchmark. Both models achieve high accuracy (93.3%) individually, and ensemble methods improve to 96.7% — a one-question improvement on a 30-question test. Error correlations confirm that haiku and sonnet do have somewhat different failure modes (r=0.464), supporting theoretical predictions, but the shared safety-alignment bias (Q27) represents a more fundamental challenge that diversity cannot overcome.
+
+### Implications
+
+**For system designers**: Within-family model ensembles provide marginal benefits for reasoning robustness. If diversity is the goal, cross-family (different providers/architectures) diversity is more likely to yield complementary failure modes. Same-provider models share not just capabilities but alignment properties.
+
+**For the diversity hypothesis**: The results are consistent with Rosales et al. (2025): model diversity alone is insufficient — what matters is **complementary failure modes**. Within-family models share too many failure patterns for diversity to provide substantial benefits.
+
+**For debate protocol design**: Critique-and-revise protocols are susceptible to the &#34;sycophantic revision&#34; failure where correct models adopt incorrect critiques. Future designs should include mechanisms to validate critique quality before accepting revisions.
+
+### Confidence in Findings
+
+**Medium confidence** in the negative finding (diversity doesn&#39;t help much) within this model family. The main uncertainty is the small benchmark size (n=30) with very few failures. Additional evidence needed: (1) cross-family models (GPT, LLaMA, Gemini), (2) larger adversarial benchmark (200+ questions), (3) higher-temperature sampling for within-condition diversity.
+
+---
+
+## 8. Next Steps
+
+### Immediate Follow-ups
+
+1. **Cross-family study**: Use OpenRouter or multi-provider setup to compare GPT-4.1, Claude Sonnet, and Llama-3 as heterogeneous ensemble members. This is the true test of architectural diversity.
+
+2. **Larger adversarial benchmark**: Create 200+ novel adversarial questions not likely in LLM training data, using programmatic generation (e.g., novel knight-knave configurations, synthetic math with deliberate traps).
+
+3. **Higher temperature ensemble**: Repeat with temperature=0.7 for ensemble conditions to introduce productive within-model sampling diversity and compare with cross-model diversity.
+
+4. **Failure-mode targeted ensembles**: Instead of random mixing, design ensembles specifically to cover identified failure modes (e.g., one agent specialized in causal reasoning, another in logical deduction).
+
+### Alternative Approaches
+
+- **Mixture of Experts routing**: Use a lightweight classifier to route questions to the model most likely to succeed, rather than always using all models.
+- **Cascade architectures**: Have haiku handle easy questions and escalate hard ones to sonnet only (FrugalGPT-style), measuring accuracy and cost jointly.
+
+### Open Questions
+
+1. Does shared safety alignment across same-provider models fundamentally limit diversity benefits?
+2. At what difficulty level does within-family diversity begin to outperform homogeneous ensembles?
+3. Can debate protocols be redesigned to preserve correct initial answers while benefiting from critique?
+
+---
+
+## 9. References
+
+1. Du, Y. et al. (2023). &#34;Improving Factuality and Reasoning in Language Models through Multiagent Debate.&#34; NeurIPS 2023. arXiv:2305.14325.
+2. Chen, J.C. et al. (2023). &#34;ReConcile: Round-Table Conference Improves Reasoning via Consensus among Diverse LLMs.&#34; ACL 2024. arXiv:2309.13007.
+3. Wu, H. et al. (2025). &#34;Can LLM Agents Really Debate? A Controlled Study of Multi-Agent Debate in Logical Reasoning.&#34; arXiv:2511.07784.
+4. Rosales, R. &amp; Miret, S. (2025). &#34;Diverse LLMs or Diverse Question Interpretations? That is the Ensembling Question.&#34; Intel Labs. arXiv:2507.21168.
+5. Tekin, S.F. et al. (2024). &#34;LLM-TOPLA: Efficient LLM Ensemble by Maximising Diversity.&#34; arXiv:2410.03953.
+6. Li, J. et al. (2024). &#34;More Agents Is All You Need.&#34; TMLR 2024. arXiv:2402.05120.
+7. Wu, Y. et al. (2023). &#34;Exploring Model Learning Heterogeneity for Boosting Ensemble Robustness.&#34; arXiv:2310.02237.
+8. Liang, T. et al. (2023). &#34;Encouraging Divergent Thinking in Large Language Models through Multi-Agent Debate.&#34; ACL 2024. arXiv:2305.19118.
+9. Li, Z.Z. et al. (2025). &#34;From System 1 to System 2: A Survey of Reasoning Large Language Models.&#34; arXiv:2502.17419.
+
+---
+
+## Appendix: Experimental Configuration
+
+```python
+# Key parameters
+HAIKU_MODEL = &#34;claude-haiku-4-5-20251001&#34;
+SONNET_MODEL = &#34;claude-sonnet-4-6&#34;
+TEMPERATURE = 0.0
+MAX_TOKENS = 512
+RANDOM_SEED = 42
+
+# Conditions
+CONDITIONS = {
+    &#34;single_haiku&#34;: &#34;1x haiku, direct answer&#34;,
+    &#34;single_sonnet&#34;: &#34;1x sonnet, direct answer&#34;,
+    &#34;homogeneous_haiku&#34;: &#34;3x haiku, majority vote&#34;,
+    &#34;heterogeneous_2h1s&#34;: &#34;2x haiku + 1x sonnet, majority vote&#34;,
+    &#34;debate&#34;: &#34;haiku proposes, sonnet critiques, haiku revises&#34;
+}
+
+# Benchmark: 30 questions, 5 categories, 6 each
+# + 6 paraphrase variants
+```
+
+
+════════════════════════════════════════════════════════════════════════════════
+                            RESEARCH PLAN
+════════════════════════════════════════════════════════════════════════════════
+
+# Research Planning: Architectural Diversity in Multi-Agent LLM Systems
+
+## Motivation &amp; Novelty Assessment
+
+### Why This Research Matters
+Multi-agent LLM systems are increasingly deployed for complex reasoning tasks, yet most systems use homogeneous model ensembles that share failure modes. If diverse agents make complementary errors, architectural heterogeneity could substantially improve system robustness — particularly on adversarially-designed ambiguous tasks where shared biases are most harmful.
+
+### Gap in Existing Work
+Based on `literature_review.md`:
+- Du et al. (2023), More Agents (2024): Study homogeneous ensembles only; don&#39;t measure error correlation
+- ReConcile (2023): Uses heterogeneous models but doesn&#39;t systematically ablate diversity level or test adversarial robustness
+- Wu et al. (2025): Controlled study of debate factors, finds diversity important, but uses same-family models with different prompts
+- Rosales et al. (2025): Challenges naive diversity hypothesis — finds question interpretation diversity often beats model diversity; argues failure mode correlation, not mere independence, is key
+- **Critical Gap**: No study systematically compares capability-level diversity (different-size same-family models) with adversarially-designed tasks specifically targeting shared failure modes, while measuring error correlation matrices
+
+### Our Novel Contribution
+1. **Custom adversarial benchmark**: Reasoning tasks with surface-pattern misleading cues across 5 categories, designed to expose specific failure modes
+2. **Capability diversity study**: Comparing homogeneous (same model size) vs. heterogeneous (mixed model sizes within Claude family) ensembles
+3. **Error correlation quantification**: Measuring pairwise error correlation between agent types across task categories
+4. **Adversarial robustness**: Testing stability under paraphrase perturbations
+
+### Experiment Justification
+- **Exp 1 (Single Agent Baselines)**: Establish individual accuracy and failure mode profiles for each model
+- **Exp 2 (Homogeneous Ensembles)**: Test whether scaling same-model sampling provides diversity benefits
+- **Exp 3 (Heterogeneous Ensembles)**: Test whether mixing capability levels improves on homogeneous baselines
+- **Exp 4 (Debate Protocol)**: Test whether structured debate between different-capability agents improves accuracy beyond voting
+- **Exp 5 (Adversarial Robustness)**: Test stability of each condition under question paraphrasing
+
+---
+
+## Research Question
+Do multi-agent LLM systems with deliberate capability diversity (heterogeneous model families/sizes) demonstrate superior robustness on adversarially-designed ambiguous reasoning tasks compared to homogeneous ensembles, due to reduced correlated error rates?
+
+## Background and Motivation
+Classical ensemble learning theory predicts that diversity reduces correlated errors. For LLMs, different model sizes within the same family exhibit meaningfully different failure modes: smaller models rely more on surface patterns, while larger models apply deeper reasoning. This within-family capability diversity provides a tractable proxy for cross-family architectural diversity, enabling controlled experiments with available API access.
+
+## Hypothesis Decomposition
+
+**H1 (Accuracy)**: Heterogeneous ensembles achieve higher accuracy than same-size homogeneous ensembles on adversarial tasks
+**H2 (Error Correlation)**: Error correlation between haiku-haiku agent pairs &gt; error correlation between haiku-sonnet agent pairs
+**H3 (Debate Benefit)**: Structured debate (critique + revision) between different-capability agents outperforms mere voting
+**H4 (Adversarial Robustness)**: Heterogeneous ensembles degrade less under paraphrase perturbations
+
+**Independent Variables**:
+- Ensemble composition (homogeneous-haiku, homogeneous-sonnet, heterogeneous-mixed)
+- Aggregation mechanism (majority voting, confidence-weighted voting, debate)
+- Task category (5 adversarial categories)
+
+**Dependent Variables**:
+- Task accuracy (primary)
+- Pairwise error correlation (diversity metric)
+- Perturbation stability (robustness metric)
+
+---
+
+## Proposed Methodology
+
+### Approach
+Use the Anthropic API with claude-haiku-4-5 (fast, smaller) and claude-sonnet-4-6 (capable, larger) to represent capability-level diversity within the Claude family. Design 30 adversarial reasoning questions across 5 categories. Compare 5 experimental conditions:
+
+1. **Single-Haiku**: One haiku agent, zero-shot CoT
+2. **Single-Sonnet**: One sonnet agent, zero-shot CoT
+3. **Homogeneous-Haiku**: 3x haiku agents, majority voting
+4. **Homogeneous-Sonnet**: 3x sonnet agents, majority voting
+5. **Heterogeneous-Mixed**: 2x haiku + 1x sonnet agents, majority voting
+6. **Debate-Mixed**: haiku proposes, sonnet critiques, haiku revises (1 round)
+
+### Adversarial Task Categories (6 per category = 30 total)
+1. **Misleading Math**: Problems where a shortcut/pattern gives wrong answer (bat-ball, rate problems, compound interest traps)
+2. **Causal Traps**: Correlation-causation, confounded causal chains, Simpson&#39;s paradox variants
+3. **Logical Deception**: Knight-knave-style puzzles with deliberate misleading surface patterns
+4. **Numerical Tricks**: Problems using anchoring, base rate neglect, or unit confusion
+5. **Framing Effects**: Same problem, misleading framing leads to different reasoning paths; tests consistency
+
+Plus 6 paraphrase variants of 6 original questions for adversarial robustness testing.
+
+### Baselines
+- Single best model (sonnet) = performance ceiling individual baseline
+- Single smallest model (haiku) = performance floor individual baseline
+- Homogeneous 3x majority voting (established as effective baseline in More Agents, 2024)
+
+### Evaluation Metrics
+1. **Accuracy**: Exact match to ground truth (0/1 per question)
+2. **Pairwise Error Correlation (ρ)**: Cohen&#39;s kappa between agent pair error vectors; lower = more diverse
+3. **Diversity Index**: Mean pairwise error correlation across ensemble members (lower = more diverse)
+4. **Consensus Rate**: Fraction of questions where majority voting reaches clear consensus (&gt;2/3 agreement)
+5. **Perturbation Stability**: Accuracy change under paraphrase (robustness score)
+
+### Statistical Analysis Plan
+- **Effect size**: Cohen&#39;s d for accuracy differences between conditions (n=30 questions)
+- **Bootstrap CI**: 1000 bootstrap resamples for 95% confidence intervals on accuracy
+- **McNemar&#39;s test**: For pairwise comparison of which condition gets more questions right
+- **Pearson correlation**: For error correlation between agent pairs
+- **Significance level**: α = 0.05
+
+---
+
+## Adversarial Task Design
+
+### Category 1: Misleading Math (6 questions)
+Design principle: Problems where the &#34;obvious&#34; arithmetic shortcut gives wrong answer
+
+Example: &#34;A bat and ball cost $1.10 total. The bat costs $1.00 more than the ball. How much does the ball cost?&#34;
+- Surface answer: $0.10 (wrong)
+- Correct answer: $0.05
+
+### Category 2: Causal Traps (6 questions)
+Design principle: Problems with correlation/causation confusion, hidden confounders
+
+Example: &#34;Hospital X has a higher death rate than Hospital Y. Should you avoid Hospital X?&#34;
+- Surface answer: Yes
+- Correct: No — Hospital X likely receives sicker patients (Simpson&#39;s paradox)
+
+### Category 3: Logical Deception (6 questions)
+Design principle: Multi-step logical puzzles where one misleading piece of information creates false impression
+
+Example: Knight-Knave variants where the structure suggests one answer but the logical deduction gives another
+
+### Category 4: Numerical Tricks (6 questions)
+Design principle: Anchoring, base rate neglect, unit confusion
+
+Example: &#34;If 1% of people have disease X, and the test has 99% accuracy, what is the probability a positive test means you have the disease?&#34;
+- Surface answer: 99%
+- Correct: ~50% (base rate neglect)
+
+### Category 5: Framing Effects (6 questions)
+Design principle: Questions where framing creates systematic bias in reasoning direction
+
+---
+
+## Expected Outcomes
+
+**Supporting H1**: Heterogeneous ensemble accuracy &gt; homogeneous-haiku; possibly &gt; homogeneous-sonnet due to complementary strengths
+
+**Supporting H2**: Haiku-haiku error correlation &gt; haiku-sonnet error correlation (different capability = different failure modes)
+
+**Supporting H3**: Debate condition outperforms majority voting, especially on logic and causal tasks
+
+**Supporting H4**: Heterogeneous ensemble shows &lt; 10% accuracy degradation under paraphrase; homogeneous shows &gt; 15%
+
+**Null result possible**: If sonnet dominates all conditions (anchoring effect in debate), heterogeneous may not outperform homogeneous-sonnet. This would suggest that capability asymmetry leads to dominance rather than complementarity.
+
+---
+
+## Timeline and Milestones
+
+- **Phase 0-1 (Planning)**: 30 min — Complete (this document)
+- **Phase 2 (Environment)**: 10 min — Install packages, verify API
+- **Phase 3 (Adversarial Task Design)**: 20 min — Write 30 questions with ground truth
+- **Phase 4 (Experiment Implementation)**: 20 min — Code multi-agent framework
+- **Phase 5 (Experiment Execution)**: 30 min — Run all API calls (~250 calls)
+- **Phase 6 (Analysis &amp; Documentation)**: 20 min — Statistics, visualization, report
+
+Total: ~130 min (within 1h if focused; target to complete core in 60 min)
+
+---
+
+## Potential Challenges
+
+1. **API Rate Limits**: Anthropic throttles requests; use async calls with retry backoff
+2. **LLM Non-Determinism**: Run with temperature=0 for reproducibility
+3. **Answer Extraction**: LLMs give verbose answers; need robust extraction logic
+4. **Haiku Limitations**: May fail on all hard tasks, reducing statistical power; include moderate-difficulty questions
+
+## Success Criteria
+1. At least 3 of 4 sub-hypotheses show trends in predicted direction
+2. Error correlation is measurably lower for haiku-sonnet than haiku-haiku pairs
+3. Statistical tests show p &lt; 0.1 for at least one key comparison (given n=30)
+4. Results are interpretable and informative even if hypothesis not confirmed
+
+
+════════════════════════════════════════════════════════════════════════════════
+                          LITERATURE REVIEW
+════════════════════════════════════════════════════════════════════════════════
+
+# Literature Review: Architectural Diversity in Multi-Agent LLM Systems for Robust Collective Reasoning
+
+## Research Area Overview
+
+This review covers the intersection of multi-agent LLM frameworks and diversity-driven robustness in collective reasoning. The core research question is: **Do heterogeneous multi-agent LLM systems (using diverse model families) outperform homogeneous ensembles on adversarially-designed ambiguous tasks, and do they exhibit lower correlated failure rates?**
+
+The field has evolved rapidly since 2023, building on classical ensemble learning theory and extending it to large language models. Key themes include:
+1. Multi-agent debate and discussion frameworks
+2. Ensemble diversity metrics and their impact on performance
+3. Heterogeneous vs. homogeneous model combinations
+4. Adversarial robustness of LLM ensembles
+5. Convergence and consensus mechanisms in multi-agent reasoning
+
+---
+
+## Key Papers
+
+### Paper 1: Improving Factuality and Reasoning in Language Models through Multiagent Debate
+
+- **Authors**: Yilun Du, Shuang Li, Antonio Torralba, Joshua Tenenbaum, Igor Mordatch
+- **Year**: 2023
+- **Source**: arXiv:2305.14325 (NeurIPS 2023)
+- **Key Contribution**: Foundational &#34;society of minds&#34; approach where multiple LLM instances propose, debate, and update answers over multiple rounds. Demonstrates that multi-agent debate significantly improves mathematical reasoning and factual validity.
+- **Methodology**:
+  - Multiple instances of the same LLM (homogeneous) generate independent candidate answers
+  - Agents then read and critique others&#39; responses
+  - Consensus prompts guide agents to update their answers
+  - Process iterates until convergence
+  - Uses zero-shot chain-of-thought reasoning throughout
+- **Datasets Used**: GSM8K (math), Chess (strategic reasoning), Biography (factual verification), MMLU (general reasoning)
+- **Baselines**: Single LLM (GPT-3.5, GPT-4), CoT, Self-Consistency
+- **Results**: Multi-agent debate improves accuracy by 11% on GSM8K over single models; improves factual validity by 20%; performance scales with number of agents (from 1 to 7)
+- **Key Finding**: Agents are &#34;agreeable&#34; due to RLHF training, which limits debate duration; &#34;stubborn&#34; prompts improve debate quality
+- **Code Available**: Yes - https://composable-models.github.io/llm_debate/
+- **Relevance**: Foundational paper establishing the multi-agent debate paradigm; primarily uses homogeneous agents, which our research will extend to heterogeneous architectures
+
+### Paper 2: Encouraging Divergent Thinking in Large Language Models through Multi-Agent Debate
+
+- **Authors**: Tian Liang, Zhiwei He, Wenxiang Jiao, Xing Wang, Yan Wang, et al.
+- **Year**: 2023
+- **Source**: arXiv:2305.19118 (ACL 2024)
+- **Key Contribution**: Identifies the &#34;Degeneration-of-Thought (DoT)&#34; problem with single-model self-reflection and introduces Multi-Agent Debate (MAD) as the solution. Key insight: once an LLM establishes confidence, self-reflection fails to generate novel thoughts.
+- **Methodology**:
+  - Two agents in &#34;tit for tat&#34; debate (affirmative vs. negative)
+  - A judge LLM manages the debate and determines final answer
+  - Adaptive break mechanism stops debate when consensus emerges
+  - Tests heterogeneous models (found that different LLMs as judges can introduce bias)
+- **Datasets Used**: Counter-intuitive arithmetic reasoning, Commonsense Machine Translation (trans-MT)
+- **Baselines**: Self-reflection, zero-shot CoT, single agent
+- **Results**: MAD outperforms self-reflection on both tasks; modest level of debate intensity yields best results
+- **Key Finding**: &#34;LLMs might not be a fair judge if different LLMs are used for agents&#34; — diversity can also introduce bias
+- **Code Available**: Yes - https://github.com/Skytliang/Multi-Agents-Debate
+- **Relevance**: Directly relevant; first systematic study of multi-agent debate with early exploration of heterogeneous models
+
+### Paper 3: ReConcile: Round-Table Conference Improves Reasoning via Consensus among Diverse LLMs
+
+- **Authors**: Justin Chih-Yao Chen, Swarnadeep Saha, Mohit Bansal
+- **Year**: 2023
+- **Source**: arXiv:2309.13007 (ACL 2024)
+- **Key Contribution**: RECONCILE — the first multi-model (heterogeneous) multi-agent framework with confidence-weighted voting, convincingness demonstration, and round-table discussion. Explicitly demonstrates that **diversity originating from different models is critical** to superior performance.
+- **Methodology**:
+  - Round-table conference with diverse LLM agents (GPT-3.5, PaLM-2, Claude)
+  - Discussion prompts include: grouped answers, confidence scores, demonstrations of corrective explanations
+  - Confidence-weighted voting mechanism for consensus
+  - Multiple rounds of discussion with convincingness learning
+- **Datasets Used**: 7 benchmarks: StrategyQA, ECQA, GSM8K, AQuA, Saycan, MATH, plus additional evaluations
+- **Baselines**: Self-Refine, Self-Consistency, Du et al. (2023) Debate, GPT-4 single agent
+- **Results**: +11.4% over best baseline on CommonsenseQA; outperforms GPT-4 on StrategyQA (+3.4%); +8% on MATH (even beating GPT-4 and DeepSeekMath)
+- **Key Finding**: &#34;Diversity originating from different models is critical to its superior performance&#34; — BERTScore-based diversity metric confirms this
+- **Code Available**: Yes - https://github.com/dinobby/ReConcile
+- **Relevance**: **Most directly relevant** to our hypothesis; proves diverse LLMs outperform homogeneous ensembles and provides the confidence-weighted voting approach we should baseline against
+
+### Paper 4: Can LLM Agents Really Debate? A Controlled Study of Multi-Agent Debate in Logical Reasoning
+
+- **Authors**: Haolun Wu, Zhenkun Li, Lingyao Li
+- **Year**: 2025
+- **Source**: arXiv:2511.07784
+- **Key Contribution**: Controlled study disentangling the effects of various structural and cognitive factors on MAD outcomes using Knight-Knave-Spy logic puzzles with verifiable ground truth.
+- **Methodology**:
+  - Custom Knight-Knave-Spy dataset: 1,800 puzzles (4-9 players, 300 per size)
+  - Six factors studied: team size, composition (diversity), confidence visibility, debate order, debate depth, task difficulty
+  - Player-by-player debate loop with initial proposal, debate phase, and reflection phase
+  - Process-level analysis of behavioral patterns
+- **Datasets Used**: Custom Knight-Knave-Spy dataset (released with paper)
+- **Baselines**: Single agents of various models, homogeneous teams, majority voting baselines
+- **Results**: Group diversity and intrinsic reasoning strength dominate; structural parameters (order, confidence visibility) offer minimal gains; majority pressure suppresses independent correction
+- **Key Finding**: &#34;Intrinsic reasoning strength and group diversity are the dominant drivers of debate success&#34;; diverse teams effectively overturn incorrect consensus while homogeneous teams create echo chambers
+- **Code Available**: Yes (link in paper)
+- **Relevance**: Provides the most rigorous controlled experimental framework for testing our diversity hypothesis; the Knight-Knave-Spy puzzle is an ideal adversarial task
+
+### Paper 5: Harnessing Multiple Large Language Models: A Survey on LLM Ensemble
+
+- **Authors**: Zhijun Chen, Jingzheng Li, et al.
+- **Year**: 2025
+- **Source**: arXiv:2502.18036
+- **Key Contribution**: First systematic survey of LLM ensemble methods with taxonomy: ensemble-before-inference, ensemble-during-inference, ensemble-after-inference.
+- **Taxonomy**:
+  - Before: Routing (classification-based, reward-based, assignment-based)
+  - During: Token-level, span-level, process-level ensemble
+  - After: Non-cascade (selection, selection+regeneration) and Cascade methods
+- **Key Methods Surveyed**: LLM-Blender, Mixtral, More Agents (AgentForest), LLM-TOPLA, FrugalGPT, etc.
+- **Relevance**: Essential reference for understanding the landscape of LLM ensemble approaches; provides experimental methodology and evaluation metrics used across the field
+
+### Paper 6: Diverse LLMs or Diverse Question Interpretations? That is the Ensembling Question
+
+- **Authors**: Rafael Rosales, Santiago Miret (Intel Labs)
+- **Year**: 2025
+- **Source**: arXiv:2507.21168
+- **Key Contribution**: Compares model diversity (multiple models answering same question) vs. question interpretation diversity (same model answering rephrased question) — finds that question interpretation diversity often outperforms model diversity!
+- **Methodology**:
+  - Binary question answering with majority voting
+  - GPT-4 and Llama model families
+  - 3 datasets: BoolQ, StrategyQA, PubMedQA
+- **Results**: Question interpretation diversity consistently leads to better accuracy; model diversity typically produces results between best and worst individual members without clear improvement
+- **Key Finding**: For model diversity to work, models need truly complementary failure modes (negatively correlated errors), not just independence
+- **Datasets Used**: BoolQ, StrategyQA, PubMedQA
+- **Relevance**: Critical challenge to the naive model diversity hypothesis; suggests that architectural diversity alone is insufficient — failure mode correlation is key
+
+### Paper 7: LLM-TOPLA: Efficient LLM Ensemble by Maximising Diversity
+
+- **Authors**: Selim Furkan Tekin, Fatih Ilhan, Tiansheng Huang, Sihao Hu, Ling Liu (Georgia Tech)
+- **Year**: 2024
+- **Source**: arXiv:2410.03953
+- **Key Contribution**: Introduces &#34;focal diversity metric&#34; for quantifying diversity-performance correlation; diversity-optimized ensemble pruning to select top-k sub-ensembles; learn-to-ensemble for resolving output inconsistency.
+- **Methodology**:
+  - Focal diversity metric: captures diversity-performance correlation among ensemble members
+  - Pruning algorithm: recommends top-performing sub-ensembles of size S from pool of N LLMs
+  - Learn-to-ensemble: detects and resolves output inconsistency
+- **Datasets Used**: MMLU, GSM8K, SearchQA, XSum (8 models: phi-2, Mixtral, LLaMA variants, GPT-3.5)
+- **Results**: +2.2% on MMLU over Mixtral; +2.1% on GSM8K over AgentForest; +3.9x on SearchQA F1
+- **Code Available**: Yes - https://github.com/git-disl/llm-topla
+- **Relevance**: Provides the diversity metric we should use to measure ensemble diversity; architecture directly applicable to heterogeneous multi-agent systems
+
+### Paper 8: More Agents Is All You Need
+
+- **Authors**: Junyou Li, Qin Zhang, Yangbin Yu, Qiang Fu, Deheng Ye (Tencent)
+- **Year**: 2024
+- **Source**: arXiv:2402.05120 (TMLR 2024)
+- **Key Contribution**: Demonstrates that LLM performance scales with the number of agents in a sampling-and-voting framework (Agent Forest). This scaling is orthogonal to other methods and correlates with task difficulty.
+- **Methodology**:
+  - Sampling-and-voting (Agent Forest) method
+  - Evaluate across many LLMs (Llama-2 13B/70B, GPT-3.5, GPT-4) and tasks
+  - Integrate with CoT, Zero-Shot CoT, SPP
+- **Datasets Used**: GSM8K, MATH, MMLU, Chess (Du et al.), HumanEval
+- **Results**: Performance improves monotonically with number of agents; effect is stronger on harder tasks; similar LLMs at larger scale can match heterogeneous ensembles
+- **Key Finding**: Agent count matters even for homogeneous agents; provides strong baseline for comparing diverse vs. non-diverse ensembles
+- **Code Available**: Yes - https://github.com/MoreAgentsIsAllYouNeed/AgentForest
+- **Relevance**: Important homogeneous ensemble baseline; allows measuring marginal benefit of diversity beyond mere scale
+
+### Paper 9: Exploring Model Learning Heterogeneity for Boosting Ensemble Robustness
+
+- **Authors**: Yanzhao Wu, Ka-Ho Chow, Wenqi Wei, Ling Liu (Georgia Tech)
+- **Year**: 2023
+- **Source**: arXiv:2310.02237
+- **Key Contribution**: Formal analysis showing that heterogeneous deep ensembles with high diversity can boost robustness against both natural errors and adversarial attacks via negative correlation analysis.
+- **Methodology**:
+  - Two-tier heterogeneity: within-task (object detection) and cross-task (detection + segmentation)
+  - Weighted bounding box ensemble consensus
+  - Connected component labeling (CCL) for cross-task alignment
+  - Negative correlation as the formal metric for diversity benefit
+- **Datasets Used**: COCO, VOC (object detection/segmentation)
+- **Results**: Heterogeneous ensembles demonstrate stronger adversarial robustness and better generalization than homogeneous ones; negative correlation between member errors is key
+- **Key Finding**: &#34;Heterogeneous DNN models trained for solving the same learning problem can significantly strengthen performance&#34;; formal analysis via negative correlation learning theory
+- **Code Available**: Yes - https://github.com/git-disl/HeteRobust
+- **Relevance**: Provides the theoretical foundation for heterogeneous diversity; negative correlation analysis should be applied to LLM ensembles in our experiments
+
+### Paper 10: Stable LLM Ensemble: Interaction between Example Representativeness and Diversity
+
+- **Authors**: Junichiro Niimi (Meijo University)
+- **Year**: 2025
+- **Source**: arXiv:2510.13143
+- **Key Contribution**: Shows that combining representative example selection (centroid-based) with controlled temperature diversity outperforms random selection by +7.6% (macro-F1) and exceeds 5-shot prompting by +21.1%.
+- **Methodology**:
+  - Centroid-based vs. random one-shot example selection
+  - Temperature variation for output diversity
+  - Ensemble aggregation with majority voting
+- **Datasets Used**: Sentiment analysis, classification (various NLP tasks)
+- **Results**: Higher temperature + centroid-based examples &gt;&gt; random selection; controlled diversity is better than unconstrained diversity
+- **Relevance**: Highlights that diversity needs to be calibrated; too much diversity (high temperature, random prompts) can hurt; architectural diversity must be paired with appropriate calibration
+
+### Paper 11: MetaGPT: Meta Programming for A Multi-Agent Collaborative Framework
+
+- **Authors**: Sirui Hong, Mingchen Zhuge, Jiaqi Chen et al. (DeepWisdom + KAUST)
+- **Year**: 2023 (ICLR 2024)
+- **Source**: arXiv:2308.00352
+- **Key Contribution**: Introduces SOPs (Standardized Operating Procedures) for multi-agent LLM systems; assembly-line paradigm for complex software engineering tasks.
+- **Methodology**:
+  - Role-based agent assignment (Product Manager, Developer, QA Engineer, etc.)
+  - Standardized output formats for each role
+  - Structured message passing between agents
+- **Datasets Used**: Software engineering benchmarks (HumanEval, SWE-bench)
+- **Code Available**: Yes - https://github.com/geekan/MetaGPT
+- **Relevance**: Key reference for multi-agent coordination architectures; role diversity vs. model architecture diversity distinction
+
+### Paper 12: Towards Effective GenAI Multi-Agent Collaboration (Enterprise Applications)
+
+- **Authors**: Raphael Shu, Nilaksh Das, Michelle Yuan, Monica Sunkara, Yi Zhang (AWS Bedrock)
+- **Year**: 2024
+- **Source**: arXiv:2412.05449
+- **Key Contribution**: Empirical evaluation of multi-agent collaboration at enterprise scale showing +70% improvement over single-agent approaches; introduces coordination mode and routing mode.
+- **Methodology**:
+  - Coordination mode: parallel communication with payload referencing
+  - Routing mode: efficient message forwarding
+  - 3 enterprise domains with handcrafted scenarios
+- **Results**: 90% end-to-end goal success with multi-agent; +70% vs. single-agent; payload referencing improves code tasks by 23%
+- **Relevance**: Practical evidence for multi-agent superiority in complex tasks; establishes enterprise use case motivation
+
+### Paper 13: Tree-of-Debate: Multi-Persona Debate Trees Elicit Critical Thinking
+
+- **Authors**: Priyanka Kargupta, Ishika Agarwal, Tal August et al.
+- **Year**: 2025
+- **Source**: arXiv:2502.14767
+- **Key Contribution**: Extends debate to a tree structure with multiple personas for scientific comparison tasks; addresses exponential growth of research requiring comparative analysis.
+- **Methodology**:
+  - Tree of debate with branching arguments
+  - Multiple distinct personas per LLM agent
+  - Critical thinking elicitation for scientific comparison
+- **Relevance**: Shows how structural diversity (roles/personas) complements model diversity
+
+### Paper 14: SWE-Debate: Competitive Multi-Agent Debate for Software Issue Resolution
+
+- **Authors**: Han Li, Yuling Shi, Shaoxin Lin et al.
+- **Year**: 2025
+- **Source**: arXiv:2507.23348
+- **Key Contribution**: Applies competitive debate to software engineering — agents independently generate solutions and critique each other before merging, improving SWE-bench resolution rates.
+- **Relevance**: Shows multi-agent debate effectiveness in specialized domains; provides evaluation framework on concrete coding tasks
+
+### Paper 15: From System 1 to System 2: A Survey of Reasoning Large Language Models
+
+- **Authors**: Zhong-Zhi Li, Duzhen Zhang, Ming-Liang Zhang et al.
+- **Year**: 2025
+- **Source**: arXiv:2502.17419
+- **Key Contribution**: Comprehensive survey of reasoning in LLMs from fast intuitive (System 1) to deliberate analytical (System 2) reasoning; covers CoT, tree search, multi-agent approaches.
+- **Relevance**: Contextualizes multi-agent debate within the broader reasoning landscape; clarifies where architectural diversity provides unique benefits
+
+---
+
+## Common Methodologies
+
+1. **Multi-Round Debate**: Used in Du et al. (2023), Liang et al. (2023), Chen et al. (2023), Wu et al. (2025). Agents iteratively update answers based on others&#39; responses.
+
+2. **Sampling-and-Voting / Majority Voting**: Used in Wang et al. (2023, Self-Consistency), Li et al. (2024, More Agents), Rosales et al. (2025). Simple ensemble baseline.
+
+3. **Confidence-Weighted Voting**: Used in ReConcile (Chen et al., 2023), Stable LLM Ensemble (Niimi, 2025). Weights agent votes by expressed confidence.
+
+4. **Diversity-Optimized Ensemble Pruning**: Used in LLM-TOPLA (Tekin et al., 2024). Select optimal sub-ensemble from larger pool based on diversity metrics.
+
+5. **Negative Correlation Analysis**: Used in Wu et al. (2023, HeteRobust). Theoretical framework linking diversity to ensemble robustness.
+
+---
+
+## Standard Baselines
+
+- **Single Agent (CoT)**: Standard chain-of-thought with single LLM; ubiquitous baseline
+- **Self-Consistency** (Wang et al., 2023): Multiple samples from same model + majority voting; critical homogeneous ensemble baseline
+- **Self-Refine/Self-Reflection** (Madaan et al., 2023): Single model iterative refinement with own feedback
+- **Homogeneous Debate** (Du et al., 2023): Multiple instances of same model in debate; key comparison for diversity hypothesis
+- **Agent Forest / More Agents** (Li et al., 2024): Scaling homogeneous sampling-voting
+- **GPT-4 Single Agent**: Strong single-model baseline representing best available model
+
+---
+
+## Evaluation Metrics
+
+- **Accuracy**: Most common for classification/QA tasks (MMLU, ARC, GSM8K)
+- **F1 Score**: For open-ended generation tasks
+- **ROUGE**: For summarization tasks
+- **Error Correlation**: Pairwise agreement/disagreement between ensemble members (diversity metric)
+- **BERTScore Diversity**: Used in ReConcile to quantify output diversity
+- **Focal Diversity Metric**: Used in LLM-TOPLA (Tekin et al., 2024)
+- **Negative Correlation**: Theoretical metric from Wu et al. (2023)
+- **Convergence Rate**: Rounds to reach consensus in debate
+
+---
+
+## Datasets Used in Literature
+
+| Dataset | Task | Size | Used In |
+|---------|------|------|---------|
+| GSM8K | Math reasoning | 7,473 train / 1,319 test | Du2023, Chen2023, Li2024, Tekin2024 |
+| MMLU | General knowledge (57 subjects) | 14K test | Du2023, Li2024, Tekin2024 |
+| StrategyQA | Commonsense reasoning | ~2K | Chen2023, Rosales2025 |
+| BoolQ | Binary QA | 9.4K train / 3.3K val | Rosales2025 |
+| ARC-Challenge | Science QA (multi-choice) | 1,119 train / 1,172 test | Standard benchmark |
+| CommonsenseQA | Commonsense reasoning | 9.7K train / 1.2K val | Chen2023 |
+| AQuA-RAT | Algebraic reasoning | ~100K | Chen2023 |
+| HumanEval | Code generation | 164 problems | Li2024 |
+| Knight-Knave-Spy | Logical deduction | 1,800 puzzles | Wu2025 |
+
+---
+
+## Gaps and Opportunities
+
+1. **Heterogeneous vs. Homogeneous Comparison at Scale**: Most papers either study homogeneous debate (Du et al., More Agents) or use a handful of heterogeneous models without systematic ablation of diversity level. Rigorous comparison across diversity levels is lacking.
+
+2. **Adversarial/Ambiguous Task Design**: Most benchmarks test factual knowledge or straightforward reasoning. Deliberately adversarial or ambiguous tasks (designed to expose model biases) are underexplored.
+
+3. **Inductive Bias Diversity**: No study specifically examines how diversity in training paradigms (instruction tuning vs. RLHF vs. pre-training only) or architecture family (transformer variants, state space models) affects collective reasoning.
+
+4. **Correlated Error Quantification**: While Wu et al. (2023) provide negative correlation analysis for DNNs, systematic measurement of error correlation among LLM ensembles is missing.
+
+5. **Convergence Speed vs. Accuracy Trade-off**: How does diversity affect convergence speed in debate? Diverse teams might take longer to converge but reach better answers.
+
+6. **Adversarial Robustness**: Chen et al. (2023) and Wu et al. (2025) show improved robustness, but adversarial prompting specifically designed to exploit shared biases of homogeneous models is unstudied.
+
+---
+
+## Recommendations for Our Experiment
+
+**Recommended Datasets**:
+1. **Primary**: GSM8K (math reasoning - well-understood, fast evaluation), MMLU (diverse knowledge)
+2. **Secondary**: Knight-Knave-Spy-style logic puzzles (controlled, verifiable), adversarially-crafted ambiguous questions
+3. **Create adversarial dataset**: Generate questions specifically designed to exploit known biases of individual model families (e.g., positional bias in GPT, format biases in Claude, frequency biases in LLaMA)
+
+**Recommended Baselines** (in order of importance):
+1. Single best agent (GPT-4o or Claude 3.5 Sonnet)
+2. Self-Consistency (same model, multiple samples, majority vote)
+3. Homogeneous debate (Du et al. 2023 approach with same model family)
+4. More Agents / Agent Forest (large homogeneous ensemble)
+5. ReConcile (heterogeneous, confidence-weighted — closest to our approach)
+
+**Recommended Metrics**:
+1. Task accuracy (primary)
+2. Pairwise error correlation between agents (key diversity metric)
+3. Convergence rate (rounds to consensus)
+4. Answer consistency across perturbations (adversarial robustness)
+5. Diversity score (focal diversity metric from LLM-TOPLA)
+
+**Methodological Considerations**:
+- Use at least 3 distinct model families (GPT, Claude, LLaMA/Mistral) for heterogeneous condition
+- Control for total compute: compare N heterogeneous models vs. N*k homogeneous samples
+- Measure diversity at multiple levels: answer diversity, reasoning chain diversity, error correlation
+- Use adversarial perturbations (paraphrasing, answer-swapping, distractor insertion) to test robustness
+- Report both accuracy AND error correlation to support the hypothesis mechanistically
+- Consider confidence calibration: heterogeneous models may have different confidence scales
+
+
+════════════════════════════════════════════════════════════════════════════════
+                          PAPER REQUIREMENTS
+════════════════════════════════════════════════════════════════════════════════
+
+Generate a complete academic paper with the following structure:
+
+1. TITLE
+   - Clear, specific, informative
+   - Should convey main finding or contribution
+
+2. AUTHOR
+   - Use this exact author line in the \author{} block: NeuriCo
+
+3. ABSTRACT (150-250 words)
+   - Problem statement
+   - Approach
+   - Key results
+   - Significance
+
+4. INTRODUCTION
+   - Research problem and motivation
+   - Gap in existing work
+   - Our contribution (be specific)
+   - Paper organization
+
+5. RELATED WORK
+   - Organized by theme/approach
+   - Position our work relative to prior work
+   - Cite papers from literature review
+
+6. METHODOLOGY
+   - Clear description of approach
+   - Experimental setup
+   - Datasets used
+   - Evaluation metrics
+   - Baselines
+
+7. RESULTS
+   - Present results with tables and figures
+   - Statistical analysis
+   - Comparison to baselines
+   - Ablation studies (if applicable)
+
+8. DISCUSSION
+   - Interpretation of results
+   - Limitations
+   - Broader implications
+
+9. CONCLUSION
+   - Summary of contributions
+   - Key findings
+   - Future work
+
+10. REFERENCES
+   - BibTeX format
+   - All cited papers
+
+════════════════════════════════════════════════════════════════════════════════
+                          OUTPUT FORMAT
+════════════════════════════════════════════════════════════════════════════════
+
+Create a MODULAR LaTeX project with the following directory structure:
+
+paper_draft/
+├── main.tex              # Main file that imports all sections
+├── references.bib        # BibTeX references
+├── sections/
+│   ├── abstract.tex      # Abstract content
+│   ├── introduction.tex  # Introduction section
+│   ├── related_work.tex  # Related work section
+│   ├── methodology.tex   # Methodology section
+│   ├── results.tex       # Results section
+│   ├── discussion.tex    # Discussion section
+│   └── conclusion.tex    # Conclusion section
+├── figures/              # Directory for any generated figures
+├── tables/               # Directory for complex standalone tables
+└── appendix/             # Directory for appendix sections (if needed)
+
+INSTRUCTIONS:
+1. First, create the directory structure above (mkdir -p paper_draft/sections paper_draft/figures paper_draft/tables paper_draft/appendix)
+2. Write main.tex using the EXACT preamble for NEURIPS:
+
+   \documentclass{article}
+   \usepackage[final]{neurips_2025}  % NEURIPS style (neurips_2025.sty is in paper_draft/)
+   \usepackage[hidelinks]{hyperref}  % REQUIRED: clickable links
+   \usepackage{booktabs}  % REQUIRED: professional tables
+   \usepackage{graphicx}
+   \usepackage{amsmath,amssymb}
+
+   % Import command files
+   \input{commands/math}
+   \input{commands/general}
+   \input{commands/macros}
+
+   % Use this bibliography style:
+   \bibliographystyle{plainnat}
+
+   \author{NeuriCo}
+
+   - Use \input{sections/...} to include each section
+   - Use \bibliography{references} for references
+3. Write each section file with COMPLETE content (no placeholders)
+4. Each section file should include its \section{} command
+5. Write references.bib with all citations in BibTeX format
+6. After writing all files, compile the paper:
+   cd paper_draft && pdflatex -interaction=nonstopmode main.tex && bibtex main && pdflatex -interaction=nonstopmode main.tex && pdflatex -interaction=nonstopmode main.tex
+
+This modular structure allows humans to easily:
+- Edit individual sections without navigating a large file
+- Track changes per section
+- Reuse sections across different paper versions
+
+════════════════════════════════════════════════════════════════════════════════
+                          QUALITY REQUIREMENTS
+════════════════════════════════════════════════════════════════════════════════
+
+- Academic tone throughout
+- All claims must be supported by data from the experiment report
+- Proper citations using \cite{} commands
+- Clear figures and tables with proper captions
+- NO placeholder text - every section must have real content
+- The paper MUST compile without errors
+- If compilation fails, debug and fix the LaTeX errors
+
+════════════════════════════════════════════════════════════════════════════════
+                          LAB WRITING STYLE
+════════════════════════════════════════════════════════════════════════════════
+
+Follow these lab-specific conventions to match our paper style:
+
+1. LANGUAGE STYLE:
+   - Use active voice: "We propose", "We examine", "We focus on"
+   - Be direct and confident: "Our main question is...", "We hypothesize that..."
+   - State things clearly and simply - prefer plain language over jargon
+   - Use bold questions as paragraph organizers: {\bf what is X?}
+   - Include specific quantitative claims: "8.97% over baseline"
+   - Avoid fancy wording: "utilize" → "use", "facilitate" → "help"
+
+2. INTRODUCTION STRUCTURE:
+   - Engaging hook (get to the point quickly)
+   - Problem importance
+   - Gap identification
+   - Your approach with method figure reference
+   - Quantitative preview of results
+   - Contribution bullets (3-4 items, action verbs)
+
+3. CONTRIBUTION LISTS:
+   \begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+       \item We propose...
+       \item We conduct...
+       \item We complement...
+   \end{itemize}
+
+4. MODULAR COMMANDS STRUCTURE:
+   Command templates are pre-copied to paper_draft/commands/:
+   - math.tex: Math notation macros
+   - general.tex: Formatting macros
+   - macros.tex: Project-specific term definitions (customize this for your paper)
+
+   In main.tex, include:
+   \input{commands/math}
+   \input{commands/general}
+   \input{commands/macros}
+
+5. REFERENCE CONVENTIONS:
+   Use reference macros from math.tex:
+   - \figref{fig:name} for "figure 1" (lowercase, in-sentence)
+   - \Figref{fig:name} for "Figure 1" (capitalized, start of sentence)
+   - \secref{sec:name} for "section 2"
+
+6. TEXT FORMATTING:
+   - Use \para{Header text} for bold paragraph headers
+   - Define method/dataset names with \textsc and \xspace:
+     \newcommand{\methodname}{\textsc{MethodName}\xspace}
+
+7. TABLE FORMATTING:
+   - Use booktabs package (no vertical lines)
+   - Use \resizebox{\textwidth}{!}{...} for wide tables
+   - Use @{} to remove padding at table edges
+   - Use \cmidrule(lr){x-y} for sub-headers
+   - Use \textsc{} for dataset/method names in headers
+   - Bold best results with {\bf ...}
+
+8. FIGURE FORMATTING:
+   - Use 0.32\textwidth for 3-column subfigures
+   - Use 0.95\linewidth for full-width figures
+   - Use \input{figures/legend} for shared legends
+   - Write self-contained captions explaining key observations
+
+9. RESULTS PRESENTATION:
+   - Define \increase and \decrease for colored arrows (green up, red down)
+   - Bold best results in tables
+   - Report confidence intervals when available
+
+10. ALGORITHM STYLING:
+    - Use algpseudocode with [noend]
+    - Use \triangleright for comments
+
+11. HYPERLINKS (REQUIRED):
+    - Always use \usepackage[hidelinks]{hyperref} or with colored links
+    - All citations, section refs, figure refs, table refs must be clickable
+    - This is essential for reader navigation
+
+════════════════════════════════════════════════════════════════════════════════
+                          WORKFLOW: REVIEW AND REFLECT
+════════════════════════════════════════════════════════════════════════════════
+
+Before calling finish, you MUST complete these review steps:
+
+1. REVIEW RESOURCES (at the start):
+   - Read .claude/skills/paper-writer/SKILL.md for detailed guidance
+   - Study templates/paper_writing/lab_style_guide.md for style conventions
+   - Browse paper_examples/ for formatting and language patterns
+
+2. SELF-REFLECTION (before finishing):
+   After writing all sections, review your work against these criteria:
+
+   LANGUAGE CHECK:
+   - [ ] Is the writing clear and jargon-free?
+   - [ ] Are claims specific with quantitative support?
+   - [ ] Is active voice used throughout?
+
+   FORMATTING CHECK:
+   - [ ] Does main.tex include \input{commands/math}, \input{commands/general}, \input{commands/macros}?
+   - [ ] Is hyperref package included for clickable references?
+   - [ ] Do tables use booktabs (no vertical lines)?
+   - [ ] Are best results bolded in tables?
+   - [ ] Are figures/tables properly captioned?
+
+   STRUCTURE CHECK:
+   - [ ] Does introduction follow: hook → importance → gap → approach → preview → contributions?
+   - [ ] Are contribution bullets specific with action verbs?
+   - [ ] Does the paper compile without errors?
+
+3. FIX ISSUES:
+   - Address any issues found in the self-reflection
+   - Re-compile and verify the PDF looks correct
+
+Only after completing this review should you consider the paper finished.

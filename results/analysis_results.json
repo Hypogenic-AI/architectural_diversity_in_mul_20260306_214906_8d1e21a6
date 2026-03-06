@@ -1,0 +1,85 @@
+{
+  "accuracy": {
+    "single_haiku": {
+      "mean": 0.9333333333333333,
+      "n": 30,
+      "correct": 28
+    },
+    "single_sonnet": {
+      "mean": 0.9333333333333333,
+      "n": 30,
+      "correct": 28
+    },
+    "homogeneous_haiku": {
+      "mean": 0.9666666666666667,
+      "n": 30,
+      "correct": 29
+    },
+    "heterogeneous_2h1s": {
+      "mean": 0.9666666666666667,
+      "n": 30,
+      "correct": 29
+    },
+    "debate": {
+      "mean": 0.9333333333333333,
+      "n": 30,
+      "correct": 28
+    }
+  },
+  "error_correlations": {
+    "single_haiku_vs_single_sonnet": {
+      "r": 0.4642857142857142,
+      "p": 0.009749019763335295
+    },
+    "single_haiku_vs_homogeneous_haiku": {
+      "r": 0.6948083337796509,
+      "p": 2.041418412505215e-05
+    },
+    "single_haiku_vs_heterogeneous_2h1s": {
+      "r": 0.6948083337796509,
+      "p": 2.041418412505215e-05
+    },
+    "single_sonnet_vs_homogeneous_haiku": {
+      "r": 0.6948083337796509,
+      "p": 2.041418412505215e-05
+    },
+    "single_sonnet_vs_heterogeneous_2h1s": {
+      "r": 0.6948083337796509,
+      "p": 2.041418412505215e-05
+    },
+    "homogeneous_haiku_vs_heterogeneous_2h1s": {
+      "r": 0.9999999999999998,
+      "p": 1.734072837471929e-216
+    }
+  },
+  "debate_outcomes": {
+    "Maintained\nCorrect": 28,
+    "Improved\n(Wrong\u2192Right)": 0,
+    "Degraded\n(Right\u2192Wrong)": 1,
+    "Maintained\nWrong": 1
+  },
+  "mcnemar_tests": {
+    "haiku_vs_hetero": 1.0,
+    "homo_haiku_vs_hetero": 1.0,
+    "sonnet_vs_hetero": 1.0,
+    "hetero_vs_debate": 1.0
+  },
+  "robustness": {
+    "single_haiku": {
+      "orig": 0.9333333333333333,
+      "para": 0.8333333333333334
+    },
+    "single_sonnet": {
+      "orig": 0.9333333333333333,
+      "para": 0.8333333333333334
+    },
+    "homogeneous_haiku": {
+      "orig": 0.9666666666666667,
+      "para": 0.8333333333333334
+    },
+    "heterogeneous_2h1s": {
+      "orig": 0.9666666666666667,
+      "para": 0.8333333333333334
+    }
+  }
+}

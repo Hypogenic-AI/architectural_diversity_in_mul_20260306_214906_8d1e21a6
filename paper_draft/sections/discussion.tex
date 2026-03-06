@@ -1,0 +1,126 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Interpreting the Results}
+
+\para{Near-ceiling performance limits diversity benefits.}
+Our most striking finding is that both \haiku and \sonnet individually achieve
+93.3\% accuracy on \advbench, a benchmark explicitly designed to be adversarial.
+This high baseline leaves only 1--2 questions as potential improvement targets,
+making statistical significance unattainable with $n{=}30$.
+Modern Claude models trained with RLHF have likely encountered the classical
+cognitive trap problems that form the basis of our benchmark~\citep{li2025system2},
+making our benchmark insufficiently novel to expose meaningful failure mode differences.
+A key lesson is that adversarial benchmarks for 2025-era models must use \emph{novel}
+problems not likely present in training data.
+
+\para{Error correlation confirms theoretical predictions.}
+Despite the ceiling effect, we do observe a clear and statistically significant
+difference in error correlation: the \haiku--\sonnet cross-capability pair
+achieves $r{=}0.464$ (diversity index 0.536), while within-capability pairs
+reach $r{=}0.695$ (diversity index 0.305).
+This confirms \Htwo and is consistent with \citet{wu2023heterogeneous}'s
+theoretical analysis: different capability levels do produce different failure modes.
+The difference in diversity indices (0.536 vs.\ 0.305) is substantial in magnitude,
+even though it does not translate to accuracy differences on our near-saturated benchmark.
+With a more difficult benchmark (say, 50\% average accuracy), this difference in
+error correlation would likely produce measurable accuracy gains.
+
+\para{Safety alignment as a cross-cutting shared bias.}
+The most important finding of this study is not about capability diversity at all:
+it is about shared safety alignment.
+Q27 reveals that all five conditions share an identical failure mode
+because all Claude models are trained with similar RLHF principles
+that refuse to give medical recommendations without clinical context.
+This shared bias is \emph{more} harmful than correlated random errors,
+because no within-family ensemble can overcome it.
+\citet{rosales2025diverse}'s argument that models need \emph{complementary failure modes}
+applies here: within-family models share not just capabilities but safety alignment properties,
+making their failures systematically correlated on safety-sensitive questions.
+Cross-family diversity (Claude + GPT + LLaMA) would be needed to overcome this.
+
+\para{Sycophantic revision in the debate protocol.}
+Our \debate protocol demonstrates the ``agreeability'' problem identified
+by \citet{du2023debate}: \haiku accepts \sonnet's critique on Q23
+and revises its originally correct answer to an incorrect one.
+This ``sycophantic revision'' is concerning because our debate structure was
+designed to mitigate it---\haiku proposes first and revises last,
+giving it agency over the final answer.
+Despite this structural choice, \haiku accepted \sonnet's more authoritative
+but wrong interpretation.
+Future debate protocols should include mechanisms to validate critique quality
+before accepting revisions, \eg, requiring the critique to be accompanied
+by a specific logical refutation rather than a general disagreement.
+
+\para{Heterogeneous voting via haiku majority.}
+An interesting side effect of the 2H+1S composition is that the \haiku majority
+in the \hetero condition correctly overruled \sonnet's minority interpretation on Q23.
+This is the \emph{opposite} of the expected ``wisdom of stronger models'' effect:
+the stronger model (sonnet) was wrong, and the weaker model's majority protected
+the ensemble from this error.
+This illustrates that majority voting in heterogeneous ensembles is not simply
+a weighted combination favoring the stronger model---it is sensitive to the
+specific composition and question difficulty.
+
+\subsection{Limitations}
+
+\para{Small benchmark ($n{=}30$).}
+With only 1--2 failures per condition, all McNemar tests are severely underpowered.
+A meaningful comparison would require at least 200 questions at an average
+accuracy of 70--80\% to achieve power of 0.80 for a 5 percentage point effect.
+Our results should be treated as exploratory findings, not confirmatory evidence.
+
+\para{Within-family diversity only.}
+We compare \haiku and \sonnet only, both trained by Anthropic.
+The core hypothesis about architectural diversity across families
+(Claude vs.\ GPT vs.\ LLaMA) remains untested. Cross-family diversity
+would expose providers' different training objectives, data mixes,
+and safety implementations---the conditions most likely to yield
+truly complementary failure modes.
+
+\para{Temperature zero reduces sampling diversity.}
+Running all conditions at temperature 0.0 means homogeneous ensembles produce
+identical or near-identical responses, making 3$\times$\haiku effectively
+equivalent to 1$\times$\haiku in most cases.
+A more faithful study would use temperature $\approx$0.7 to introduce
+productive within-model sampling diversity and separate scale effects
+from capability effects.
+
+\para{Classical adversarial tasks may be saturated.}
+Problems like the bat-and-ball puzzle and the base-rate medical test
+have been extensively discussed in LLM training data and benchmarks.
+Truly novel adversarial tasks---\eg, programmatically generated
+Knight-Knave configurations~\citep{wu2025debate}, synthetic mathematical
+traps with novel surface patterns, or counterfactual causal chains---would
+better test whether capability-level diversity benefits emerge in harder settings.
+
+\para{Evaluation of open-ended answers.}
+Our content-based matching for procedural questions (Q17, Q18) may miss
+correct answers phrased differently.
+In particular, Q18's answer extraction failure in \haiku could be a false negative:
+\haiku's prose does mention the heat-based insight, suggesting the correct reasoning
+is present but not surfaced in the final answer extraction.
+
+\subsection{Implications for System Design}
+
+For practitioners building multi-agent LLM systems,
+our findings suggest three design principles:
+
+\begin{enumerate}[leftmargin=*,itemsep=2pt,topsep=2pt]
+    \item \emph{Use cross-family diversity when diversity is the goal.}
+          Within-family capability diversity provides lower error correlation
+          but shares safety alignment biases.
+          For safety-sensitive applications, including models from different
+          providers with different alignment training is essential.
+    \item \emph{Prefer cascade over debate for heterogeneous systems.}
+          Our debate results confirm that critique-revision protocols
+          introduce sycophancy risk.
+          Cascade architectures (route easy questions to the small model,
+          escalate hard ones to the large model)~\citep{survey2025ensemble}
+          avoid this failure mode while preserving cost efficiency.
+    \item \emph{Benchmark difficulty must match model capability.}
+          Evaluating 2025-era LLMs on classical cognitive trap problems
+          provides a near-ceiling baseline that obscures diversity effects.
+          Practitioners should regularly update their internal benchmarks
+          to track genuinely challenging problems for their deployed models.
+\end{enumerate}

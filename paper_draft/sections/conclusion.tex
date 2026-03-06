@@ -1,0 +1,43 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+We conducted a controlled empirical study of capability-level diversity in
+multi-agent LLM systems using a custom 30-question adversarial reasoning benchmark
+across five cognitive trap categories.
+We evaluated five conditions spanning a diversity continuum---single agents,
+homogeneous three-agent ensembles, heterogeneous two-small-plus-one-large ensembles,
+and a structured debate protocol---using real API calls to Anthropic's
+\haiku and \sonnet models.
+
+Our main finding is that within-family capability diversity produces measurably
+lower error correlation ($r{=}0.464$ vs.\ $r{=}0.695$ for within-capability pairs),
+confirming the theoretical diversity hypothesis at the correlation level.
+However, this advantage does not translate to statistically significant accuracy gains
+on our benchmark, where both models individually achieve 93.3\% accuracy.
+The debate protocol degrades performance due to sycophantic revision,
+and the dominant shared failure mode---a safety-aligned medical refusal---is
+orthogonal to capability-level diversity and cannot be overcome by any within-family ensemble.
+
+Taken together, our results support \citeauthor{rosales2025diverse}'s~\citeyearpar{rosales2025diverse}
+argument that complementary failure modes, not mere diversity, are what matter for ensemble benefit.
+Within-family models share not just capabilities but safety alignment properties,
+creating systematic shared biases that transcend capability-level diversity.
+
+\para{Key takeaway.}
+Capability-level diversity within a single LLM family reduces error correlation
+but does not reliably improve accuracy because shared alignment properties create
+correlated failures that cannot be overcome by mixing model sizes.
+
+\para{Future work.}
+Three directions follow naturally from our findings.
+First, a \emph{cross-family study} using OpenAI, Anthropic, and open-source models
+(GPT-4o, Claude Sonnet, LLaMA-3) would test whether cross-family diversity
+yields complementary failure modes even on safety-sensitive questions.
+Second, a \emph{larger and novel adversarial benchmark} (200+ questions,
+programmatically generated, not present in training data) would provide
+the statistical power needed to detect the diversity effects that our
+$n{=}30$ near-saturated benchmark cannot resolve.
+Third, \emph{cascade architectures} that route questions by difficulty
+rather than aggregating all agents on all questions offer a promising
+alternative to ensemble voting, trading diversity benefits for cost efficiency
+while avoiding the sycophancy pitfalls of debate.

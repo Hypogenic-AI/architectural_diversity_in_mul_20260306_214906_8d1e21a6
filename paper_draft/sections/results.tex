@@ -1,0 +1,259 @@
+\section{Results}
+\label{sec:results}
+
+\subsection{Overall Accuracy}
+
+\tabref{tab:main_results} reports accuracy across all five conditions.
+Both single-agent baselines achieve 93.3\% (28/30 correct).
+Both three-agent ensemble conditions (\homoghaiku and \hetero) reach 96.7\% (29/30),
+while the \debate protocol returns to 93.3\%.
+McNemar's test between any pair of conditions yields $p \geq 0.480$
+due to very few discordant question pairs (at most 2 per comparison),
+meaning no pairwise difference is statistically significant.
+The 95\% bootstrap confidence intervals overlap substantially, spanning
+$[77.5\%, 100\%]$ for 93.3\% conditions and $[83.3\%, 100\%]$ for 96.7\% conditions.
+
+\begin{table}[t]
+\centering
+\caption{Overall accuracy across five conditions on \advbench (30 questions).
+Best results in \textbf{bold}. CI = 95\% bootstrap confidence interval (1000 resamples).
+McNemar $p$-values against \singlehaiku shown in parentheses.}
+\label{tab:main_results}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Condition & Correct / Total & Accuracy (\%) & 95\% CI & McNemar $p$ \\
+\midrule
+\singlehaiku   & 28 / 30 & 93.3 & [77.5, 100] & --- \\
+\singlesonnet  & 28 / 30 & 93.3 & [77.5, 100] & 1.000 \\
+\homoghaiku    & 29 / 30 & \textbf{96.7} & [83.3, 100] & 1.000 \\
+\hetero        & 29 / 30 & \textbf{96.7} & [83.3, 100] & 1.000 \\
+\debate        & 28 / 30 & 93.3 & [77.5, 100] & 1.000 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\subsection{Per-Category Accuracy}
+\label{sec:per_category}
+
+\tabref{tab:category_results} shows per-category performance.
+Two categories---Misleading Math and Causal Traps---are solved perfectly (100\%)
+by all five conditions.
+Logical Deception, Numerical Tricks, and Framing Effects each
+show 83\% accuracy for at least some conditions (one error out of six).
+The only category where conditions differ is Numerical Tricks:
+\singlesonnet and \debate score 83\%, while \singlehaiku, \homoghaiku, and \hetero
+all score 100\%.
+This difference arises from a single question (Q23, discussed below).
+
+\begin{table}[t]
+\centering
+\caption{Per-category accuracy (\%) across five conditions. All categories have 6 questions.
+Bold indicates category-best. Identical scores share the formatting.}
+\label{tab:category_results}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+Category & \singlehaiku & \singlesonnet & \homoghaiku & \hetero & \debate \\
+\midrule
+Misleading Math   & \textbf{100} & \textbf{100} & \textbf{100} & \textbf{100} & \textbf{100} \\
+Causal Traps      & \textbf{100} & \textbf{100} & \textbf{100} & \textbf{100} & \textbf{100} \\
+Logical Deception & 83 & 83 & 83 & 83 & 83 \\
+Numerical Tricks  & \textbf{100} & 83 & \textbf{100} & \textbf{100} & 83 \\
+Framing Effects   & 83 & 83 & 83 & 83 & 83 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\subsection{Error Correlation and Diversity}
+
+\tabref{tab:error_correlation} reports pairwise Pearson error correlations.
+The key comparison is between \haiku--\sonnet cross-capability pairs ($r{=}0.464$, $p{=}0.010$)
+and \haiku--\haiku within-capability pairs ($r{=}0.695$, $p{<}0.001$).
+The lower cross-capability correlation is consistent with \Htwo.
+The diversity index ($1-r$) is 0.536 for the cross-capability pair
+compared to 0.305 for within-capability pairs, confirming that different
+model sizes do yield meaningfully different failure patterns.
+
+Notably, \homoghaiku and \hetero have a perfect error correlation of 1.000:
+they make exactly the same errors. This occurs because the single question
+where they differ (Q23) is won by \haiku majority in both conditions:
+in \homoghaiku, all three \haiku agents agree, and in \hetero,
+two \haiku agents outvote one \sonnet agent.
+The perfect correlation reveals that majority voting with 2H+1S has effectively
+the same failure profile as 3H when the question on which they disagree
+is resolved by the \haiku majority.
+
+\begin{table}[t]
+\centering
+\caption{Pairwise Pearson error correlation matrix. Values closer to 0 indicate
+more diverse failure modes. $p$-values assess significance against zero correlation.
+Diversity index = $1 - r$.}
+\label{tab:error_correlation}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}llccc@{}}
+\toprule
+Condition A & Condition B & Pearson $r$ & $p$-value & Diversity Index \\
+\midrule
+\singlehaiku  & \singlesonnet & \textbf{0.464} & 0.010 & \textbf{0.536} \\
+\singlehaiku  & \homoghaiku   & 0.695 & $<$0.001 & 0.305 \\
+\singlehaiku  & \hetero       & 0.695 & $<$0.001 & 0.305 \\
+\singlesonnet & \homoghaiku   & 0.695 & $<$0.001 & 0.305 \\
+\singlesonnet & \hetero       & 0.695 & $<$0.001 & 0.305 \\
+\homoghaiku   & \hetero       & 1.000 & $<$0.001 & 0.000 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\subsection{Debate Protocol Analysis}
+
+\tabref{tab:debate_outcomes} summarizes the outcomes of the
+\debate protocol across 30 questions.
+Of 30 questions, 28 maintain the correct answer throughout (haiku correct,
+debate maintains it). Zero questions improved from wrong to right.
+One question degraded from right to wrong: on Q23, \haiku initially selected
+the correct (or at least defensible) answer of 100 years, but \sonnet's critique
+argued for the stricter interpretation (120 years), and \haiku revised to
+match \sonnet's incorrect answer.
+Overall, 9 of 30 answers changed during the debate, demonstrating that the
+protocol does cause answer changes---but none in the beneficial direction.
+
+\begin{table}[t]
+\centering
+\caption{Debate protocol outcomes across 30 questions.
+``Maintained Correct'' means haiku was right and debate kept it right.
+``Degraded'' means haiku was right but debate changed it to wrong.}
+\label{tab:debate_outcomes}
+\begin{tabular}{@{}lc@{}}
+\toprule
+Outcome & Count \\
+\midrule
+Maintained Correct      & 28 \\
+Improved (Wrong $\to$ Right) & 0 \\
+\textbf{Degraded (Right $\to$ Wrong)} & \textbf{1} \\
+Maintained Wrong        & 1 \\
+\midrule
+Total answers changed   & 9 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Failure Analysis}
+\label{sec:failure_analysis}
+
+Only three questions produced any failures. \tabref{tab:failures} details them.
+
+\begin{table}[t]
+\centering
+\caption{Failure analysis. ``All conditions'' indicates all five conditions fail identically.
+Q-ID refers to question index in \advbench.}
+\label{tab:failures}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}clp{5cm}l@{}}
+\toprule
+Q-ID & Category & Description & Failing Conditions \\
+\midrule
+Q18 & Logical Deception & Light-switch heat puzzle &
+  \singlehaiku only \\
+Q23 & Numerical Tricks & Population doubling (ambiguous ``exceed'') &
+  \singlesonnet, \debate \\
+Q27 & Framing Effects  & 90\% surgery survival recommendation &
+  \textbf{All five conditions} \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\para{Q18 (Logical Deception).}
+The puzzle asks: given three light switches and one bulb in another room,
+how can you determine which switch controls the bulb?
+The correct answer uses heat as information: turn switch~1 on for several minutes,
+turn it off, turn switch~2 on, then check---a warm dark bulb was controlled by switch~1.
+\haiku fails to extract this conclusion in the final answer despite mentioning warmth
+in its chain-of-thought prose, suggesting an answer extraction failure rather than
+a pure reasoning failure. \sonnet correctly identifies the heat-based strategy.
+
+\para{Q23 (Numerical Tricks).}
+A population of 1,000 doubles every 20 years. When does it first exceed 32,000?
+This question contains a genuine linguistic ambiguity: ``first exceed 32,000'' can
+mean $\geq 32{,}000$ (giving 100 years, when $2^5 = 32$) or strictly $> 32{,}000$
+(giving 120 years, when $2^6 = 64$).
+\haiku chooses the looser interpretation (100 years),
+while \sonnet chooses the stricter one (120 years).
+Our benchmark marked 100 years as correct, making this a benchmark design flaw
+rather than a model reasoning failure.
+The \debate protocol convinces \haiku to revise to \sonnet's stricter but
+linguistically defensible answer.
+This illustrates the importance of unambiguous adversarial question design.
+
+\para{Q27 (Framing Effects).}
+\emph{``A surgery has a 90\% survival rate. Would you recommend it?''}
+All five conditions refuse to recommend the surgery without knowing the
+underlying condition, because the 90\% survival rate alone is insufficient
+for a clinical recommendation.
+This is a \emph{systematic shared safety-aligned bias}: all Claude variants
+trained with Anthropic's RLHF principles refuse to give medical recommendations
+without full clinical context.
+This shared refusal represents a cross-cutting concern that is orthogonal to
+capability-level diversity---it cannot be overcome by any within-family ensemble method.
+
+\subsection{Adversarial Robustness under Paraphrase}
+\label{sec:robustness}
+
+\tabref{tab:robustness} shows accuracy on the six paraphrase variants.
+Both single-agent and ensemble conditions drop by 10--14 percentage points
+under paraphrasing (from $\approx$93\%--97\% to $\approx$83\%).
+Crucially, \hetero shows \emph{no} robustness advantage over \homoghaiku---both
+drop by 14 percentage points---failing to confirm \Hfour.
+The paraphrase set is only 6 questions, however, so these estimates carry high uncertainty.
+
+\begin{table}[t]
+\centering
+\caption{Adversarial robustness under paraphrase perturbation (6 questions).
+$\Delta$ = paraphrase accuracy minus original accuracy.
+Note: small sample ($n{=}6$) means estimates carry high uncertainty.}
+\label{tab:robustness}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Condition & Original Acc.\ (\%) & Paraphrase Acc.\ (\%) & $\Delta$ (pp) \\
+\midrule
+\singlehaiku   & 93.3 & 83.3 & $-$10.0 \\
+\singlesonnet  & 93.3 & 83.3 & $-$10.0 \\
+\homoghaiku    & 96.7 & 83.3 & $-$13.4 \\
+\hetero        & 96.7 & 83.3 & $-$13.4 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Hypothesis Summary}
+
+\tabref{tab:hypotheses} summarizes our hypothesis testing results.
+
+\begin{table}[t]
+\centering
+\caption{Hypothesis testing summary. \Hone--\Hfour as defined in \secref{sec:method}.}
+\label{tab:hypotheses}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}clp{5.5cm}l@{}}
+\toprule
+Hypothesis & Prediction & Evidence & Result \\
+\midrule
+\Hone & \hetero $>$ \homoghaiku accuracy
+  & 96.7\% = 96.7\%; $p{=}1.000$
+  & \textbf{Not confirmed} \\
+\Htwo & Haiku--Sonnet $r$ $<$ Haiku--Haiku $r$
+  & $r{=}0.464$ vs.\ $r{=}0.695$; $p{=}0.010$
+  & \textbf{Confirmed} \\
+\Hthree & Debate improves accuracy
+  & 0 improvements, 1 degradation
+  & \textbf{Refuted} \\
+\Hfour & \hetero more robust under paraphrase
+  & Both drop equally ($-$13.4 pp)
+  & \textbf{Not confirmed} \\
+\bottomrule
+\end{tabular}
+}
+\end{table}

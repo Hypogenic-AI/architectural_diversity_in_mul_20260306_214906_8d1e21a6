@@ -1,0 +1,152 @@
+\section{Methodology}
+\label{sec:method}
+
+\subsection{Research Questions and Hypotheses}
+
+Our main question is: \emph{Do multi-agent LLM systems with capability-level diversity
+(heterogeneous model sizes within a single family) demonstrate superior robustness
+on adversarially-designed reasoning tasks compared to homogeneous ensembles,
+due to reduced correlated error rates?}
+
+We decompose this into four testable hypotheses:
+
+\begin{itemize}[leftmargin=*,itemsep=2pt,topsep=2pt]
+    \item \Hone (\emph{Accuracy}): Heterogeneous ensembles achieve higher accuracy
+          than homogeneous ensembles.
+    \item \Htwo (\emph{Error Correlation}): Error correlation between
+          \haiku--\haiku pairs exceeds that between \haiku--\sonnet pairs.
+    \item \Hthree (\emph{Debate Benefit}): Structured debate between agents of
+          different capability levels improves accuracy over voting alone.
+    \item \Hfour (\emph{Adversarial Robustness}): Heterogeneous ensembles degrade
+          less under paraphrase perturbations than homogeneous ensembles.
+\end{itemize}
+
+\subsection{Adversarial Benchmark: \advbench}
+
+We construct a 30-question adversarial reasoning benchmark
+spanning five categories of six questions each.
+Each category is designed to expose a specific cognitive failure mode.
+
+\para{Category 1: Misleading Math.}
+Problems where a plausible arithmetic shortcut gives the wrong answer.
+The canonical example is the bat-and-ball problem: a bat and ball together cost
+\$1.10, and the bat costs exactly \$1.00 more---the na\"ive answer is 10 cents,
+but the correct answer is 5 cents. We include six such problems exploiting
+rate calculations, percentage comparisons, and compound interest.
+
+\para{Category 2: Causal Traps.}
+Problems involving correlation-causation confusion, hidden confounders,
+and Simpson's paradox variants.
+For example: Hospital A has a 2\% death rate and Hospital B has a 1\% death rate---should
+one choose Hospital B? The correct answer is no, since Hospital A may treat sicker patients
+(Simpson's paradox).
+
+\para{Category 3: Logical Deception.}
+Multi-step logic puzzles with misleading surface patterns, inspired by
+Knight-Knave-style problems~\citep{wu2025debate}.
+Surface cues suggest one answer, but the full logical deduction yields another.
+We include a light-switch heat detection puzzle (which bulb was recently on?)
+and a classic rope-burning timing puzzle.
+
+\para{Category 4: Numerical Tricks.}
+Problems exploiting anchoring, base rate neglect, and unit confusion.
+The canonical example is the medical test puzzle: if 1\% of people have disease~X
+and a test is 99\% accurate, a positive result implies only $\approx$50\% probability
+of having the disease (by Bayes' theorem), not 99\% as anchoring suggests.
+
+\para{Category 5: Framing Effects.}
+Equivalent problems presented under different framings to test reasoning consistency.
+The key example is surgery recommendation: ``A surgery has a 90\% survival rate---would
+you recommend it?'' The correct reasoning requires clinical context, but different
+framings should not change the reasoning process.
+
+\para{Paraphrase variants.}
+We additionally create six paraphrase variants of selected questions
+to test robustness under surface-level rewording.
+The same logical structure is preserved, but vocabulary and sentence structure differ.
+
+\para{Benchmark validity.}
+All 30 questions have verified ground-truth answers derived from first principles.
+Two questions (light-switch heat detection and rope-burning timing) require procedural
+free-text answers and are evaluated using content-based matching.
+One question (exponential population doubling) contains a genuine linguistic ambiguity
+in the word ``exceed''; we discuss this as a benchmark design lesson in \secref{sec:results}.
+
+\subsection{Experimental Conditions}
+
+We evaluate five conditions representing a diversity continuum
+(\tabref{tab:conditions}):
+
+\begin{table}[t]
+\centering
+\caption{Five experimental conditions. ``H'' denotes \haiku; ``S'' denotes \sonnet.
+Aggregation applies to 3-agent conditions only.}
+\label{tab:conditions}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}llccc@{}}
+\toprule
+Condition & Description & Agents & Models & Aggregation \\
+\midrule
+\singlehaiku   & Single small model           & 1 & 1H      & Direct answer \\
+\singlesonnet  & Single large model           & 1 & 1S      & Direct answer \\
+\homoghaiku    & Homogeneous small ensemble   & 3 & 3H      & Majority vote \\
+\hetero        & Heterogeneous ensemble       & 3 & 2H + 1S & Majority vote \\
+\debate        & Structured debate            & 2 & 1H + 1S & H revises after S critiques \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+The \hetero condition uses two \haiku agents and one \sonnet agent, so \haiku
+has a majority position by count. This tests whether the stronger model's
+minority opinion can override the weaker majority, or whether majority voting
+conservatively favors the smaller model.
+
+The \debate condition implements a three-turn protocol:
+(1) \haiku proposes an answer with chain-of-thought reasoning;
+(2) \sonnet critiques the proposal using a dedicated critic system prompt;
+(3) \haiku revises its answer with a dedicated reviser system prompt.
+The final answer is \haiku's revised response.
+
+\subsection{Models and Implementation}
+
+We use the Anthropic API with two models:
+\haiku (\texttt{claude-haiku-4-5-20251001}), a fast cost-efficient model,
+and \sonnet (\texttt{claude-sonnet-4-6}), a more capable model.
+
+All API calls use temperature 0.0 for deterministic, reproducible results,
+with a maximum of 512 tokens per response.
+The system prompt for all non-debate conditions encourages step-by-step reasoning
+and instructs agents to state \texttt{FINAL ANSWER:} clearly at the end.
+The debate uses separate system prompts for the critic and reviser roles.
+We set the random seed to 42 for all Python operations,
+and include a 0.3--0.5 second inter-call delay for rate limit compliance.
+Failed API calls are retried up to three times with exponential backoff.
+
+\subsection{Evaluation Metrics}
+
+\para{Task accuracy.}
+The primary metric is the fraction of questions answered correctly.
+Ground truth is a verified scalar answer for most questions and
+a content-based match for procedural questions.
+We report 95\% bootstrap confidence intervals using 1000 resamples.
+
+\para{Error correlation.}
+For each pair of conditions $A$ and $B$, we compute the Pearson correlation
+between their binary error vectors $\ve_A, \ve_B \in \{0,1\}^{30}$,
+where $e_i = 1$ if condition $i$ answers question $j$ incorrectly.
+Lower correlation indicates more diverse failure modes.
+We report the diversity index as $1 - r$.
+
+\para{Debate improvement rate.}
+The fraction of questions where the debate protocol changes \haiku's answer
+from wrong to right (improvement), right to wrong (degradation), or both.
+
+\para{Adversarial robustness.}
+The accuracy drop between original and paraphrase variants (6 questions).
+Smaller drops indicate higher robustness under surface perturbation.
+
+\para{Statistical tests.}
+We use McNemar's test for pairwise accuracy comparisons between conditions
+and report two-tailed $p$-values.
+Pearson correlation significance is assessed via $t$-test with $n{-}2$ degrees of freedom.

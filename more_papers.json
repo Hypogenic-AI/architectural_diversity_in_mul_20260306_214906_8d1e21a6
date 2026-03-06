@@ -1,0 +1,112 @@
+[
+  {
+    "title": "Instruct2Act: Mapping Multi-modality Instructions to Robotic Actions with Large Language Model",
+    "authors": [
+      "Siyuan Huang",
+      "Zhengkai Jiang",
+      "Hao Dong",
+      "Yu Qiao",
+      "Peng Gao"
+    ],
+    "year": 2023,
+    "arxiv_id": "2305.11176v3",
+    "abstract": "Foundation models have made significant strides in various applications, including text-to-image generation, panoptic segmentation, and natural language processing. This paper presents Instruct2Act, a framework that utilizes Large Language Models to map multi-modal instructions to sequential actions for robotic manipulation tasks. Specifically, Instruct2Act employs the LLM model to generate Python programs that constitute a comprehensive perception, planning, and action loop for robotic tasks. In the perception section, pre-defined APIs are used to access multiple foundation models where the S",
+    "url": "https://arxiv.org/pdf/2305.11176v3"
+  },
+  {
+    "title": "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+    "authors": [
+      "Jason Wei",
+      "Xuezhi Wang",
+      "Dale Schuurmans",
+      "Maarten Bosma",
+      "Brian Ichter"
+    ],
+    "year": 2022,
+    "arxiv_id": "2201.11903v6",
+    "abstract": "We explore how generating a chain of thought -- a series of intermediate reasoning steps -- significantly improves the ability of large language models to perform complex reasoning. In particular, we show how such reasoning abilities emerge naturally in sufficiently large language models via a simple method called chain of thought prompting, where a few chain of thought demonstrations are provided as exemplars in prompting. Experiments on three large language models show that chain of thought prompting improves performance on a range of arithmetic, commonsense, and symbolic reasoning tasks. Th",
+    "url": "https://arxiv.org/pdf/2201.11903v6"
+  },
+  {
+    "title": "HuggingGPT: Solving AI Tasks with ChatGPT and its Friends in Hugging Face",
+    "authors": [
+      "Yongliang Shen",
+      "Kaitao Song",
+      "Xu Tan",
+      "Dongsheng Li",
+      "Weiming Lu"
+    ],
+    "year": 2023,
+    "arxiv_id": "2303.17580v4",
+    "abstract": "Solving complicated AI tasks with different domains and modalities is a key step toward artificial general intelligence. While there are numerous AI models available for various domains and modalities, they cannot handle complicated AI tasks autonomously. Considering large language models (LLMs) have exhibited exceptional abilities in language understanding, generation, interaction, and reasoning, we advocate that LLMs could act as a controller to manage existing AI models to solve complicated AI tasks, with language serving as a generic interface to empower this. Based on this philosophy, we ",
+    "url": "https://arxiv.org/pdf/2303.17580v4"
+  },
+  {
+    "title": "Impact of higher-order dispersion on frequency-modulated combs",
+    "authors": [
+      "Nikola Opa\u010dak",
+      "Barbara Schneider",
+      "J\u00e9r\u00f4me Faist",
+      "Benedikt Schwarz"
+    ],
+    "year": 2023,
+    "arxiv_id": "2310.09915v1",
+    "abstract": "Frequency-modulated (FM) combs form spontaneously in free-running semiconductor lasers and possess a vast potential for spectroscopic applications. Despite recent progress in obtaining a conclusive theoretical description, experimental FM combs often exhibit non-ideal traits, which prevents their widespread use. Here we explain this by providing a clear theoretical and experimental study of the impact of the higher-order dispersion on FM combs. We reveal that spectrally-dependent dispersion is detrimental for comb performance and leads to a decreased comb bandwidth and the appearance of spectr",
+    "url": "https://arxiv.org/pdf/2310.09915v1"
+  },
+  {
+    "title": "More Agents Is All You Need",
+    "authors": [
+      "Junyou Li",
+      "Qin Zhang",
+      "Yangbin Yu",
+      "Qiang Fu",
+      "Deheng Ye"
+    ],
+    "year": 2024,
+    "arxiv_id": "2402.05120v2",
+    "abstract": "We find that, simply via a sampling-and-voting method, the performance of large language models (LLMs) scales with the number of agents instantiated. Also, this method, termed as Agent Forest, is orthogonal to existing complicated methods to further enhance LLMs, while the degree of enhancement is correlated to the task difficulty. We conduct comprehensive experiments on a wide range of LLM benchmarks to verify the presence of our finding, and to study the properties that can facilitate its occurrence. Our code is publicly available at: https://github.com/MoreAgentsIsAllYouNeed/AgentForest",
+    "url": "https://arxiv.org/pdf/2402.05120v2"
+  },
+  {
+    "title": "Flow of Reasoning: Training LLMs for Divergent Reasoning with Minimal Examples",
+    "authors": [
+      "Fangxu Yu",
+      "Lai Jiang",
+      "Haoqiang Kang",
+      "Shibo Hao",
+      "Lianhui Qin"
+    ],
+    "year": 2024,
+    "arxiv_id": "2406.05673v6",
+    "abstract": "The ability to generate diverse solutions to a given problem is a hallmark of human creativity. This divergent reasoning is also crucial for machines, enhancing their robustness and enabling them to assist humans in many applications such as scientific discovery. However, existing approaches to multi-step reasoning with large language models (LLMs) have mostly focused only on reasoning accuracy, without further discovering more diverse valid solutions. For example, supervised fine-tuning improves reasoning quality but requires vast labeled data, while reward-maximizing reinforcement learning f",
+    "url": "https://arxiv.org/pdf/2406.05673v6"
+  },
+  {
+    "title": "Cognitive Architectures for Language Agents",
+    "authors": [
+      "Theodore R. Sumers",
+      "Shunyu Yao",
+      "Karthik Narasimhan",
+      "Thomas L. Griffiths"
+    ],
+    "year": 2023,
+    "arxiv_id": "2309.02427v3",
+    "abstract": "Recent efforts have augmented large language models (LLMs) with external resources (e.g., the Internet) or internal control flows (e.g., prompt chaining) for tasks requiring grounding or reasoning, leading to a new class of language agents. While these agents have achieved substantial empirical success, we lack a systematic framework to organize existing agents and plan future developments. In this paper, we draw on the rich history of cognitive science and symbolic artificial intelligence to propose Cognitive Architectures for Language Agents (CoALA). CoALA describes a language agent with mod",
+    "url": "https://arxiv.org/pdf/2309.02427v3"
+  },
+  {
+    "title": "Progressive-Hint Prompting Improves Reasoning in Large Language Models",
+    "authors": [
+      "Chuanyang Zheng",
+      "Zhengying Liu",
+      "Enze Xie",
+      "Zhenguo Li",
+      "Yu Li"
+    ],
+    "year": 2023,
+    "arxiv_id": "2304.09797v6",
+    "abstract": "The performance of Large Language Models (LLMs) in reasoning tasks depends heavily on prompt design, with Chain-of-Thought (CoT) and self-consistency being critical methods that enhance this ability. However, these methods do not fully exploit the answers generated by the LLM to guide subsequent responses. This paper proposes a new prompting method, named Progressive-Hint Prompting (PHP), that enables automatic multiple interactions between users and LLMs by using previously generated answers as hints to progressively guide toward the correct answers. PHP is orthogonal to CoT and self-consiste",
+    "url": "https://arxiv.org/pdf/2304.09797v6"
+  }
+]

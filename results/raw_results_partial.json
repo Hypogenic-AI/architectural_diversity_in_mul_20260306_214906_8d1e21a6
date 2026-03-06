@@ -1,0 +1,716 @@
+[
+  {
+    "question_id": 1,
+    "category": "misleading_math",
+    "question": "A bat and a ball together cost $1.10. The bat costs exactly $1.00 more than the ball. How much does the ball cost? Give your answer in cents (e.g., 5 for 5 cents).",
+    "correct_answer": "5",
+    "conditions": {
+      "single_haiku": {
+        "answer": "5",
+        "is_correct": true,
+        "response": "I need to find the cost of the ball.\n\nLet me define variables:\n- Let b = cost of the ball (in dollars)\n- Let t = cost of the bat (in dollars)\n\nFrom the problem, I have two equations:\n1. t + b = 1.10 (together they cost $1.10)\n2. t = b + 1.00 (bat costs $1.00 more than ball)\n\nNow I'll substitute equation 2 into equation 1:\n(b + 1.00) + b = 1.10\n\nSimplifying:\n2b + 1.00 = 1.10\n2b = 0.10\nb = 0.05\n\nLet me verify:\n- Ball costs: $0.05\n- Bat costs: $0.05 + $1.00 = $1.05\n- Together: $0.05 + $1.05 = $1.10 \u2713\n- Bat is $1.00 more than ball: $1.05 - $0.05 = $1.00 \u2713\n\nConverting to cents: $0.05 = 5 cents\n\nFINAL ANSWER: 5"
+      },
+      "single_sonnet": {
+        "answer": "5",
+        "is_correct": true,
+        "response": "Let me define variables:\n- Let ball cost = x cents\n- Let bat cost = y cents\n\nSetting up equations:\n1. x + y = 110 (together cost $1.10)\n2. y = x + 100 (bat costs $1.00 more than ball)\n\nSubstituting equation 2 into equation 1:\nx + (x + 100) = 110\n2x + 100 = 110\n2x = 10\nx = 5\n\n**Check:** Ball = 5 cents, Bat = 105 cents\n- Together: 5 + 105 = 110 \u2713\n- Difference: 105 - 5 = 100 \u2713\n\nThe intuitive (wrong) answer is 10 cents, but that would make the bat $1.00, and the difference would only be 90 cents, not $1.00.\n\nFINAL ANSWER: 5"
+      },
+      "homogeneous_haiku": {
+        "answer": "5",
+        "is_correct": true,
+        "individual_answers": [
+          "5",
+          "5",
+          "5"
+        ],
+        "consensus": true
+      },
+      "heterogeneous_2h1s": {
+        "answer": "5",
+        "is_correct": true,
+        "individual_answers": [
+          "5",
+          "5",
+          "5"
+        ],
+        "agent_models": [
+          "claude-haiku-4-5-20251001",
+          "claude-haiku-4-5-20251001",
+          "claude-sonnet-4-6"
+        ],
+        "consensus": true
+      },
+      "debate": {
+        "answer": "5",
+        "is_correct": true,
+        "initial_answer": "5",
+        "initial_correct": true,
+        "changed": false,
+        "critique_excerpt": "CRITIQUE: Answer appears correct"
+      }
+    }
+  },
+  {
+    "question_id": 2,
+    "category": "misleading_math",
+    "question": "A store reduces a price by 20% and then increases the result by 20%. If the original price was $100, what is the final price?",
+    "correct_answer": "96",
+    "conditions": {
+      "single_haiku": {
+        "answer": "$96**",
+        "is_correct": false,
+        "response": "Let me work through this step-by-step.\n\n**Step 1: Apply the 20% reduction**\n- Original price: $100\n- 20% reduction means we pay 80% of the original price\n- Price after reduction: $100 \u00d7 0.80 = $80\n\n**Step 2: Apply the 20% increase**\n- Current price: $80\n- 20% increase means we pay 120% of the current price\n- Final price: $80 \u00d7 1.20 = $96\n\n**Verification of the pattern:**\nThis illustrates an important principle: a 20% decrease followed by a 20% increase does NOT return you to the original price. The percentage changes apply to different base amounts:\n- The 20% decrease applies to $100\n- The 20% increase applies to $80 (the reduced amount)\n\nMathematically: $100 \u00d7 0.80 \u00d7 1.20 = $100 \u00d7 0.96 = $96\n\nThe net effect is a 4% loss from the original price.\n\n**FINAL ANSWER: $96**"
+      },
+      "single_sonnet": {
+        "answer": "**$96**",
+        "is_correct": false,
+        "response": "## Step-by-Step Reasoning\n\n**Starting price:** $100\n\n**Step 1: Reduce by 20%**\n- 20% of $100 = $20\n- New price = $100 - $20 = **$80**\n\n**Step 2: Increase $80 by 20%**\n- 20% of $80 = $16\n- New price = $80 + $16 = **$96**\n\n## Key Insight\nThe misleading pattern here is assuming these operations cancel out. They don't, because the 20% increase is applied to a **smaller number** ($80) than the original 20% decrease was applied to ($100).\n\nMathematically: $100 \u00d7 0.80 \u00d7 1.20 = 100 \u00d7 0.96 = **$96**\n\nFINAL ANSWER: **$96**"
+      },
+      "homogeneous_haiku": {
+        "answer": "$96**",
+        "is_correct": false,
+        "individual_answers": [
+          "$96**",
+          "$96",
+          "$96**"
+        ],
+        "consensus": false
+      },
+      "heterogeneous_2h1s": {
+        "answer": "$96**",
+        "is_correct": false,
+        "individual_answers": [
+          "$96**",
+          "$96**",
+          "**$96**"
+        ],
+        "agent_models": [
+          "claude-haiku-4-5-20251001",
+          "claude-haiku-4-5-20251001",
+          "claude-sonnet-4-6"
+        ],
+        "consensus": false
+      },
+      "debate": {
+        "answer": "$96**",
+        "is_correct": false,
+        "initial_answer": "$96**",
+        "initial_correct": false,
+        "changed": false,
+        "critique_excerpt": "CRITIQUE: Answer appears correct\n\nThe solution correctly applies the 20% reduction to get $80, then the 20% increase to get $96. The mathematical work is accurate, the verification is sound, and the e"
+      }
+    }
+  },
+  {
+    "question_id": 3,
+    "category": "misleading_math",
+    "question": "If you have a 6-sided die and roll it 6 times, the expected number of 6s you will see is 1. You've rolled 5 times and never gotten a 6. What is the probability of getting a 6 on your next roll? Express as a fraction (e.g., 1/6).",
+    "correct_answer": "1/6",
+    "conditions": {
+      "single_haiku": {
+        "answer": "1/6",
+        "is_correct": true,
+        "response": "I need to find the probability of rolling a 6 on the next roll, given that I haven't rolled a 6 in the previous 5 rolls.\n\n**Key insight:** This is asking about the probability of a single future event, not about updating beliefs based on past data.\n\n**Step-by-step reasoning:**\n\n1. Each roll of a fair die is an **independent event**. The outcome of previous rolls does not affect future rolls.\n\n2. The probability of rolling a 6 on any single roll is always 1/6, regardless of what happened before.\n\n3. The fact that I didn't get a 6 in 5 previous rolls is irrelevant to the next roll. This is sometimes called the \"gambler's fallacy\" - the mistaken belief that past results affect independent future events.\n\n4. The preamble about expected value (1 six in 6 rolls) is just context about the die's properties, not information that changes the fundamental probability.\n\n**Verification:** If past results affected future probabilities, the die would need to have \"memory,\" which it doesn't. A fair die has no mechanism to track or respond to previous outcomes.\n\nFINAL ANSWER: 1/6"
+      },
+      "single_sonnet": {
+        "answer": "1/6",
+        "is_correct": true,
+        "response": "The key insight here is that dice rolls are independent events. The history of previous rolls has no effect on future rolls.\n\nEach roll of a fair 6-sided die has a probability of 1/6 of showing a 6, regardless of what happened on previous rolls.\n\nThe mention of \"expected number of 6s is 1\" and the history of 5 rolls without a 6 are distractors designed to invoke the gambler's fallacy \u2014 the mistaken belief that past outcomes influence future independent events.\n\nFINAL ANSWER: 1/6"
+      },
+      "homogeneous_haiku": {
+        "answer": "1/6",
+        "is_correct": true,
+        "individual_answers": [
+          "1/6",
+          "1/6",
+          "1/6"
+        ],
+        "consensus": true
+      },
+      "heterogeneous_2h1s": {
+        "answer": "1/6",
+        "is_correct": true,
+        "individual_answers": [
+          "1/6",
+          "1/6",
+          "1/6"
+        ],
+        "agent_models": [
+          "claude-haiku-4-5-20251001",
+          "claude-haiku-4-5-20251001",
+          "claude-sonnet-4-6"
+        ],
+        "consensus": true
+      },
+      "debate": {
+        "answer": "1/6",
+        "is_correct": true,
+        "initial_answer": "1/6",
+        "initial_correct": true,
+        "changed": false,
+        "critique_excerpt": "CRITIQUE: Answer appears correct\n\nThe proposed answer correctly identifies that each die roll is an independent event, and the probability of rolling a 6 on any single roll remains 1/6 regardless of p"
+      }
+    }
+  },
+  {
+    "question_id": 4,
+    "category": "misleading_math",
+    "question": "A snail is at the bottom of a 10-foot well. Each day it climbs 3 feet, but each night it slides back 2 feet. How many days does it take to reach the top?",
+    "correct_answer": "8",
+    "conditions": {
+      "single_haiku": {
+        "answer": "8 days",
+        "is_correct": false,
+        "response": "I need to track the snail's position carefully, noting that once it reaches the top during a day, it escapes (doesn't slide back).\n\n**Daily pattern:**\n- Day: climbs +3 feet\n- Night: slides -2 feet\n- Net progress per complete day-night cycle: +1 foot\n\n**Key insight:** On the final day, the snail only needs to climb 3 feet to reach 10 feet. Once it does, it escapes and doesn't slide back that night.\n\n**Tracking position:**\n\nLet me find when the snail reaches \u226510 feet during the day phase.\n\nAfter n complete day-night cycles, the snail is at position: n feet\n\nOn day (n+1), before sliding, it reaches: n + 3 feet\n\nI need: n + 3 \u2265 10\nSo: n \u2265 7\n\nAfter 7 complete cycles: position = 7 feet\nOn day 8: climbs to 7 + 3 = 10 feet \u2713\n\nThe snail reaches the top on day 8.\n\n**Verification:**\n- Day 1: 0\u21923, Night 1: 3\u21921\n- Day 2: 1\u21924, Night 2: 4\u21922\n- Day 3: 2\u21925, Night 3: 5\u21923\n- Day 4: 3\u21926, Night 4: 6\u21924\n- Day 5: 4\u21927, Night 5: 7\u21925\n- Day 6: 5\u21928, Night 6: 8\u21926\n- Day 7: 6\u21929, Night 7: 9\u21927\n- Day 8: 7\u219210 \u2713 (escapes)\n\nFINAL ANSWER: 8 days"
+      },
+      "single_sonnet": {
+        "answer": "8 days**",
+        "is_correct": false,
+        "response": "## Step-by-Step Reasoning\n\n**Identify the misleading pattern:** The surface-level answer might be 10 days (net 1 foot/day \u00d7 10), but this ignores that the snail escapes *during the day* before sliding back.\n\n**Daily progress:**\n- Net gain per full day/night cycle = 3 - 2 = 1 foot\n- But once the snail reaches the top during the day climb, it doesn't slide back\n\n**Track position at end of each night:**\n- End of Day 1 night: 1 foot\n- End of Day 2 night: 2 feet\n- End of Day 3 night: 3 feet\n- ...\n- End of Day 7 night: 7 feet\n\n**Critical point:** At the start of Day 8, the snail is at 7 feet. During Day 8, it climbs 3 feet: 7 + 3 = **10 feet** \u2014 it reaches the top!\n\nThe snail reaches the top **during Day 8**, so it does not slide back that night.\n\n**Check:** After 7 nights = 7 feet. Day 8 climb: 7 + 3 = 10 \u2713\n\n**FINAL ANSWER: 8 days**"
+      },
+      "homogeneous_haiku": {
+        "answer": "8 DAYS",
+        "is_correct": false,
+        "individual_answers": [
+          "8 days",
+          "8 days",
+          "8 days**"
+        ],
+        "consensus": false
+      },
+      "heterogeneous_2h1s": {
+        "answer": "8 DAYS",
+        "is_correct": false,
+        "individual_answers": [
+          "8 days",
+          "8 days",
+          "**8 days**"
+        ],
+        "agent_models": [
+          "claude-haiku-4-5-20251001",
+          "claude-haiku-4-5-20251001",
+          "claude-sonnet-4-6"
+        ],
+        "consensus": false
+      },
+      "debate": {
+        "answer": "8 days",
+        "is_correct": false,
+        "initial_answer": "8 days",
+        "initial_correct": false,
+        "changed": false,
+        "critique_excerpt": "CRITIQUE: Answer appears correct"
+      }
+    }
+  },
+  {
+    "question_id": 5,
+    "category": "misleading_math",
+    "question": "Two trains start from cities 300 miles apart, heading toward each other. Train A goes 60 mph; Train B goes 40 mph. A fly starts at Train A's front and flies back and forth between the trains at 100 mph until they meet. How many miles does the fly travel total?",
+    "correct_answer": "300",
+    "conditions": {
+      "single_haiku": {
+        "answer": "300 miles",
+        "is_correct": false,
+        "response": "I need to find the total distance the fly travels before the two trains meet.\n\n**Step 1: Find when the trains meet**\n\nThe trains are heading toward each other, so their relative closing speed is:\n- Combined speed = 60 + 40 = 100 mph\n\nDistance between them = 300 miles\n\nTime until they meet:\n- Time = 300 miles \u00f7 100 mph = 3 hours\n\n**Step 2: Find the fly's total distance**\n\nThe key insight is that the fly is continuously flying at 100 mph for the entire duration until the trains meet, regardless of how many times it changes direction.\n\nThe fly flies for 3 hours at 100 mph:\n- Distance = 100 mph \u00d7 3 hours = 300 miles\n\n**Verification:** This makes sense because:\n- The fly never stops flying\n- It maintains 100 mph throughout\n- The trains meet after exactly 3 hours\n- Therefore, the fly covers 100 \u00d7 3 = 300 miles total\n\nFINAL ANSWER: 300 miles"
+      },
+      "single_sonnet": {
+        "answer": "**300 miles**",
+        "is_correct": false,
+        "response": "## Step-by-step reasoning:\n\n**Find when the trains meet:**\n- Combined speed: 60 + 40 = 100 mph\n- Distance: 300 miles\n- Time to meet: 300 \u00f7 100 = **3 hours**\n\n**Find fly's total distance:**\n- The fly travels continuously at 100 mph for the entire 3 hours\n- Fly's distance = 100 mph \u00d7 3 hours = **300 miles**\n\nThe key insight is to ignore the complex back-and-forth pattern and simply recognize the fly travels for exactly as long as the trains take to meet.\n\nFINAL ANSWER: **300 miles**"
+      },
+      "homogeneous_haiku": {
+        "answer": "300 MILES",
+        "is_correct": false,
+        "individual_answers": [
+          "300 miles",
+          "300 miles",
+          "300 miles"
+        ],
+        "consensus": true
+      },
+      "heterogeneous_2h1s": {
+        "answer": "300 MILES",
+        "is_correct": false,
+        "individual_answers": [
+          "300 miles",
+          "300 miles",
+          "**300 miles**"
+        ],
+        "agent_models": [
+          "claude-haiku-4-5-20251001",
+          "claude-haiku-4-5-20251001",
+          "claude-sonnet-4-6"
+        ],
+        "consensus": false
+      },
+      "debate": {
+        "answer": "300 miles",
+        "is_correct": false,
+        "initial_answer": "300 miles",
+        "initial_correct": false,
+        "changed": false,
+        "critique_excerpt": "CRITIQUE: Answer appears correct"
+      }
+    }
+  },
+  {
+    "question_id": 6,
+    "category": "misleading_math",
+    "question": "A farmer has 17 sheep. All but 9 die. How many sheep are left?",
+    "correct_answer": "9",
+    "conditions": {
+      "single_haiku": {
+        "answer": "9 sheep",
+        "is_correct": false,
+        "response": "Let me work through this carefully.\n\nThe key phrase is \"All but 9 die.\"\n\nThis means: everything dies EXCEPT 9 sheep.\n\nSo if all but 9 die, then 9 sheep survive.\n\nLet me verify: \n- Started with: 17 sheep\n- \"All but 9\" means 9 are excluded from dying\n- Therefore: 9 sheep remain\n\nFINAL ANSWER: 9 sheep"
+      },
+      "single_sonnet": {
+        "answer": "9 sheep are left.**",
+        "is_correct": false,
+        "response": "## Step-by-step reasoning:\n\nThe key phrase is **\"all but 9 die.\"**\n\n- \"All but 9\" means **all EXCEPT 9**.\n- So 9 sheep **survive** (do not die).\n\nThis is a classic trick question where people rush to subtract: 17 - 9 = 8, which is **wrong**.\n\nThe phrase \"all but 9 die\" means 9 remain alive.\n\n**FINAL ANSWER: 9 sheep are left.**"
+      },
+      "homogeneous_haiku": {
+        "answer": "9 SHEEP",
+        "is_correct": false,
+        "individual_answers": [
+          "9 sheep",
+          "9 sheep are left.",
+          "9 sheep"
+        ],
+        "consensus": false
+      },
+      "heterogeneous_2h1s": {
+        "answer": "9 SHEEP",
+        "is_correct": false,
+        "individual_answers": [
+          "9 sheep",
+          "9 sheep",
+          "**9 sheep are left.**"
+        ],
+        "agent_models": [
+          "claude-haiku-4-5-20251001",
+          "claude-haiku-4-5-20251001",
+          "claude-sonnet-4-6"
+        ],
+        "consensus": false
+      },
+      "debate": {
+        "answer": "9 sheep are left.",
+        "is_correct": false,
+        "initial_answer": "9 sheep are left.",
+        "initial_correct": false,
+        "changed": false,
+        "critique_excerpt": "CRITIQUE: Answer appears correct.\n\nThe proposed answer correctly interprets \"all but 9\" as meaning 9 sheep survive. The verification arithmetic is also correct: 17 - 9 = 8 sheep died, leaving 9 sheep "
+      }
+    }
+  },
+  {
+    "question_id": 7,
+    "category": "causal_traps",
+    "question": "Hospital A has a 2% death rate; Hospital B has a 1% death rate. You need surgery. Should you choose Hospital B to maximize your survival chances? Answer YES or NO and briefly explain why.",
+    "correct_answer": "NO",
+    "conditions": {
+      "single_haiku": {
+        "answer": "**NO** \u2014 without knowing the case mix and procedure-specific outcomes, the aggregate death rate is insufficient to make this decision.",
+        "is_correct": false,
+        "response": "NO.\n\n**Why not:**\n\nThis is a classic example of Simpson's Paradox. The headline statistics are misleading without considering case mix.\n\nHospital B's lower death rate doesn't necessarily mean better outcomes for *you* specifically. The critical factor is: **what types of patients does each hospital treat?**\n\n**The catch:**\n- Hospital A might perform more high-risk surgeries (emergency cases, complex procedures, sicker patients)\n- Hospital B might primarily handle routine, low-risk cases\n\nIf you need a high-risk surgery, Hospital A might actually have *better* outcomes for patients like you, despite its higher overall death rate.\n\n**What matters:**\nCompare death rates *within your specific procedure and risk category*, not aggregate rates. A hospital with a 2% overall rate might have a 0.5% rate for your particular surgery, while the 1% hospital might have a 3% rate for the same procedure.\n\n**The lesson:** Always ask for risk-adjusted or procedure-specific mortality data, not just headline numbers.\n\nFINAL ANSWER: **NO** \u2014 without knowing the case mix and procedure-specific outcomes, the aggregate death rate is insufficient to make this decision."
+      },
+      "single_sonnet": {
+        "answer": "**NO.** You should not automatically choose Hospital B. The aggregate death rates are confounded by case mix severity. You need risk-adjusted, procedure-specific outcome data to make a rational decision.",
+        "is_correct": false,
+        "response": "## Analysis\n\nThis is a classic example of **Simpson's Paradox** \u2014 the surface-level answer is misleading.\n\n**The raw rates are insufficient information.**\n\nHospital B's lower overall death rate doesn't necessarily mean it's safer *for you*. The critical missing variable is **case severity mix**:\n\n- Hospital A may handle **high-risk, complex cases** (trauma, advanced cancer, emergency surgeries)\n- Hospital B may handle **low-risk, routine procedures**\n\nWhen you **stratify by case severity**, Hospital A might actually have *better* outcomes than Hospital B within each comparable risk category.\n\n**Real-world example:** If Hospital A takes all the dying patients that Hospital B refuses, Hospital A's aggregate death rate will naturally be higher \u2014 even if their surgeons are superior.\n\n**What you actually need to know:**\n- Death rates for patients with *your specific condition and risk profile*\n- Case volume for your procedure (higher volume often = better outcomes)\n- Surgeon-specific outcomes\n- Whether the hospital is a specialized center for your condition\n\n## FINAL ANSWER:\n\n**NO.** You should not automatically choose Hospital B. The aggregate death rates are confounded by case mix severity. You need risk-adjusted, procedure-specific outcome data to make a rational decision."
+      },
+      "homogeneous_haiku": {
+        "answer": "**NO** \u2014 OVERALL DEATH RATES CAN BE MISLEADING; YO",
+        "is_correct": false,
+        "individual_answers": [
+          "**NO** \u2014 overall death rates can be misleading; you need risk-adjusted data for your specific condition.",
+          "NO",
+          "**NO** \u2014 overall death rates can be misleading due to different patient populations. Compare hospital-specific outcomes for your particular procedure and condition instead."
+        ],
+        "consensus": false
+      },
+      "heterogeneous_2h1s": {
+        "answer": "**NO** \u2014 WITHOUT KNOWING THE CASE MIX AND PROCEDUR",
+        "is_correct": false,
+        "individual_answers": [
+          "**NO** \u2014 without knowing the case mix and procedure-specific outcomes, the aggregate death rate is insufficient to make this decision.",
+          "NO",
+          "**NO**"
+        ],
+        "agent_models": [
+          "claude-haiku-4-5-20251001",
+          "claude-haiku-4-5-20251001",
+          "claude-sonnet-4-6"
+        ],
+        "consensus": false
+      },
+      "debate": {
+        "answer": "NO** \u2014 You should not automatically choose Hospital B based on aggregate death rates alone. Without procedure-specific and risk-adjusted mortality data, the 2% vs. 1% comparison is insufficient. Hospital A may actually have better outcomes for your particular case due to Simpson's Paradox effects related to case mix differences.",
+        "is_correct": false,
+        "initial_answer": "**NO** \u2014 without knowing the case mix and procedure-specific outcomes, the aggregate death rate is insufficient to make this decision.",
+        "initial_correct": false,
+        "changed": true,
+        "critique_excerpt": "CRITIQUE: Answer appears correct.\n\nThe proposed answer correctly identifies Simpson's Paradox as the core issue. The reasoning is sound: aggregate mortality rates can be misleading when hospitals trea"
+      }
+    }
+  },
+  {
+    "question_id": 8,
+    "category": "causal_traps",
+    "question": "Studies show that people who carry lighters are more likely to develop lung cancer. Should we ban lighters to reduce lung cancer rates? Answer YES or NO and briefly explain why.",
+    "correct_answer": "NO",
+    "conditions": {
+      "single_haiku": {
+        "answer": "NO",
+        "is_correct": true,
+        "response": "NO.\n\n**Why this is misleading:**\n\nThis confuses correlation with causation. The relationship isn't that lighters *cause* lung cancer\u2014it's that people who smoke are more likely to both carry lighters AND develop lung cancer. The lighters are a marker of smoking behavior, not the cause.\n\n**The causal chain:**\nSmoking \u2192 Lung cancer risk (and lighter ownership)\n\nNot:\nLighter ownership \u2192 Lung cancer\n\n**Why banning lighters wouldn't work:**\n- Smokers would simply use matches, stoves, or other ignition methods\n- Non-smokers who carry lighters (campers, etc.) wouldn't be at increased risk\n- You'd be treating the symptom rather than the actual problem\n\n**The actual intervention:**\nReducing lung cancer requires addressing smoking itself through cessation programs, taxation, regulation, and public health campaigns\u2014not banning the tools smokers use.\n\nThis is a classic example of why we must identify the true causal mechanism before implementing policy solutions."
+      },
+      "single_sonnet": {
+        "answer": "NO",
+        "is_correct": true,
+        "response": "## NO\n\n**The reasoning is flawed due to confounding variables.**\n\n**Step-by-step analysis:**\n\n1. **Correlation \u2260 Causation** - The statistical link between lighters and lung cancer doesn't mean lighters *cause* cancer.\n\n2. **Identifying the confounder** - People carry lighters primarily **because they smoke**. Smoking is the actual causal mechanism for lung cancer.\n\n3. **The causal chain is:**\n   - Smoking \u2192 lung cancer\n   - Smoking \u2192 carrying lighters\n   - Lighters are merely a *marker* for smoking behavior, not a cause\n\n4. **Intervention logic** - Banning lighters would be targeting a symptom/proxy variable. Smokers would simply use matches, stoves, or other ignition sources. Lung cancer rates would be **unchanged**.\n\n5. **Effective interventions** target the actual causal mechanism: smoking cessation programs, tobacco regulation, nicotine replacement therapy.\n\n**Key principle:** When designing policy interventions, you must identify **causal relationships**, not merely correlational ones. Acting on confounded correlations wastes resources and fails to solve the actual problem.\n\nBanning lighters would be the logical equivalent of banning ambulances to reduce hospital deaths."
+      },
+      "homogeneous_haiku": {
+        "answer": "NO",
+        "is_correct": true,
+        "individual_answers": [
+          "NO",
+          "NO",
+          "NO"
+        ],
+        "consensus": true
+      },
+      "heterogeneous_2h1s": {
+        "answer": "NO",
+        "is_correct": true,
+        "individual_answers": [
+          "NO",
+          "NO",
+          "**NO** \u2014 lighters are correlated with but don't cause lung cancer; smoking does."
+        ],
+        "agent_models": [
+          "claude-haiku-4-5-20251001",
+          "claude-haiku-4-5-20251001",
+          "claude-sonnet-4-6"
+        ],
+        "consensus": false
+      },
+      "debate": {
+        "answer": "NO. Banning lighters would not reduce lung cancer rates because lighters don't cause lung cancer\u2014smoking does. Lighters are merely a marker of smoking behavior. Effective interventions must target the actual cause (smoking), not correlated objects.",
+        "is_correct": false,
+        "initial_answer": "NO",
+        "initial_correct": true,
+        "changed": true,
+        "critique_excerpt": "CRITIQUE: Answer appears correct.\n\nThe proposed answer correctly identifies the core logical fallacy (correlation vs. causation), accurately explains the confounding variable (smoking behavior), and r"
+      }
+    }
+  },
+  {
+    "question_id": 9,
+    "category": "causal_traps",
+    "question": "A drug trial shows: Treatment group \u2014 200 mild cases (190 recovered, 10 died); 100 severe cases (30 recovered, 70 died). Total: 220/300 recovered (73%). Control group \u2014 100 mild cases (81 recovered, 19 died); 200 severe cases (40 recovered, 160 died). Total: 121/300 recovered (40%). Is the treatment beneficial overall? Answer YES or NO.",
+    "correct_answer": "YES",
+    "conditions": {
+      "single_haiku": {
+        "answer": "YES**",
+        "is_correct": false,
+        "response": "I need to check if the treatment is truly beneficial by examining the data carefully.\n\n**Treatment group:**\n- Mild: 190/200 = 95% recovery\n- Severe: 30/100 = 30% recovery\n- Overall: 220/300 = 73% recovery\n\n**Control group:**\n- Mild: 81/100 = 81% recovery\n- Severe: 40/200 = 20% recovery\n- Overall: 121/300 = 40% recovery\n\n**The key insight:** This is Simpson's Paradox.\n\nLooking at recovery *rates within each severity category*:\n- Mild cases: Treatment 95% vs Control 81% \u2192 Treatment better\n- Severe cases: Treatment 30% vs Control 20% \u2192 Treatment better\n\nThe treatment appears better in *both* subgroups.\n\nHowever, the composition differs dramatically:\n- Treatment group: 67% mild, 33% severe\n- Control group: 33% mild, 67% severe\n\nThe treatment group has more mild cases (which naturally recover better), inflating its overall recovery rate. The control group has more severe cases (which naturally recover worse), deflating its overall recovery rate.\n\nWhen we account for the different case mixes, the treatment shows genuine improvement in both mild and severe categories. The overall 73% vs 40% difference is *not* purely due to case mix\u2014the treatment actually performs better within each category.\n\n**FINAL ANSWER: YES**\n\nThe treatment is beneficial. While case mix composition plays a role, the treatment demonstrates superior recovery rates in both mild (95% vs 81%) and severe (30% vs 20%) cases."
+      },
+      "single_sonnet": {
+        "answer": "YES**",
+        "is_correct": false,
+        "response": "I need to check for Simpson's Paradox by comparing recovery rates within each severity group.\n\n**Mild cases:**\n- Treatment: 190/200 = 95% recovery\n- Control: 81/100 = 81% recovery\n- Treatment is better\n\n**Severe cases:**\n- Treatment: 30/100 = 30% recovery\n- Control: 40/200 = 20% recovery\n- Treatment is better\n\n**Overall:**\n- Treatment: 220/300 = 73%\n- Control: 121/300 = 40%\n\nThe treatment group had more mild cases (200 vs 100) and fewer severe cases (100 vs 200), which inflates the overall percentage. However, when I examine each subgroup separately:\n\n- In mild cases: treatment wins (95% vs 81%)\n- In severe cases: treatment wins (30% vs 20%)\n\nThe treatment is beneficial in **both** subgroups. The overall difference is partially driven by case-mix differences, but this doesn't negate the genuine benefit \u2014 it's actually consistent across both strata. This is NOT a case where Simpson's Paradox reverses the conclusion; the paradox would only matter if subgroup results contradicted the overall result.\n\nThe treatment shows better outcomes in every meaningful comparison.\n\n**FINAL ANSWER: YES**"
+      },
+      "homogeneous_haiku": {
+        "answer": "YES**",
+        "is_correct": false,
+        "individual_answers": [
+          "YES**",
+          "YES**",
+          "YES**"
+        ],
+        "consensus": true
+      },
+      "heterogeneous_2h1s": {
+        "answer": "YES**",
+        "is_correct": false,
+        "individual_answers": [
+          "YES**",
+          "YES**",
+          "YES**"
+        ],
+        "agent_models": [
+          "claude-haiku-4-5-20251001",
+          "claude-haiku-4-5-20251001",
+          "claude-sonnet-4-6"
+        ],
+        "consensus": true
+      },
+      "debate": {
+        "answer": "YES**",
+        "is_correct": false,
+        "initial_answer": "YES**",
+        "initial_correct": false,
+        "changed": false,
+        "critique_excerpt": "## Critique\n\nThe proposed answer reaches the correct conclusion (YES) but contains a significant logical error in its reasoning.\n\n**The Error:**\n\nThe answer states: *\"Yet the treatment appears better "
+      }
+    }
+  },
+  {
+    "question_id": 10,
+    "category": "causal_traps",
+    "question": "Cities with more hospitals have more deaths. Does this mean hospitals cause deaths? Answer YES or NO and briefly explain.",
+    "correct_answer": "NO",
+    "conditions": {
+      "single_haiku": {
+        "answer": "NO",
+        "is_correct": true,
+        "response": "NO.\n\nThis is a classic example of **confounding variables** and **reverse causality**.\n\n**Why hospitals don't cause deaths:**\n\n1. **Confounding variable**: Larger cities have both more hospitals AND more people. More people = more deaths in absolute numbers, regardless of hospital quality.\n\n2. **Reverse causality**: The causal arrow points the opposite direction. Cities don't build hospitals because they want deaths\u2014they build hospitals *because* they have larger populations with more medical needs (including terminal illnesses).\n\n3. **Selection bias**: Sicker people migrate to cities with better medical infrastructure. Hospitals concentrate where illness is prevalent, not the reverse.\n\n**The correct interpretation**: The correlation reflects that hospitals are built in response to population size and health needs, not that they cause mortality.\n\nThis illustrates why correlation \u2260 causation. You must identify what variables are actually driving the relationship before drawing causal conclusions."
+      },
+      "single_sonnet": {
+        "answer": "**NO** \u2014 the correlation is explained by confounding variables (population size, pre-existing illness), not a causal relationship where hospitals cause deaths.",
+        "is_correct": false,
+        "response": "**NO**\n\nThis is a classic **confounding variable** (or **reverse causation**) fallacy.\n\n**Why the correlation exists:**\n- Larger cities have more people \u2192 more hospitals **and** more deaths simply due to **population size**\n- Sicker people **go to** hospitals (reverse causation \u2014 illness causes both hospitalization and death)\n- Hospitals are built **where demand exists**, not the other way around\n\n**The logical error:**\nCorrelation \u2260 Causation. The variable driving both is **population size** (and underlying illness rates), not hospitals themselves.\n\n**Reality:** Hospitals prevent deaths. Removing hospitals would increase mortality rates, which directly contradicts the implied causal claim.\n\nFINAL ANSWER: **NO** \u2014 the correlation is explained by confounding variables (population size, pre-existing illness), not a causal relationship where hospitals cause deaths."
+      },
+      "homogeneous_haiku": {
+        "answer": "NO",
+        "is_correct": true,
+        "individual_answers": [
+          "NO",
+          "NO",
+          "NO"
+        ],
+        "consensus": true
+      },
+      "heterogeneous_2h1s": {
+        "answer": "NO",
+        "is_correct": true,
+        "individual_answers": [
+          "NO",
+          "NO",
+          "NO \u2014 the correlation is explained by confounding variables (population size, patient illness severity), not causation."
+        ],
+        "agent_models": [
+          "claude-haiku-4-5-20251001",
+          "claude-haiku-4-5-20251001",
+          "claude-sonnet-4-6"
+        ],
+        "consensus": false
+      },
+      "debate": {
+        "answer": "NO - Hospitals do not cause deaths. The correlation between hospital numbers and deaths reflects a confounding variable (population size), not causation. Larger cities have more hospitals and more deaths because they have more people, not because hospitals cause deaths.",
+        "is_correct": false,
+        "initial_answer": "NO",
+        "initial_correct": true,
+        "changed": true,
+        "critique_excerpt": "CRITIQUE: Answer appears correct.\n\nThe proposed answer correctly identifies this as a correlation vs. causation fallacy, accurately identifies the confounding variable (population/city size), and prov"
+      }
+    }
+  },
+  {
+    "question_id": 11,
+    "category": "causal_traps",
+    "question": "Studies consistently show that children who attend preschool earn more as adults. A policymaker concludes that building more preschools will increase adult earnings. What is the most significant threat to this causal conclusion? Choose: (A) Sample size too small, (B) Confounding by family socioeconomic status, (C) Preschool content is outdated, (D) The study only measured salaries not happiness.",
+    "correct_answer": "B",
+    "conditions": {
+      "single_haiku": {
+        "answer": "(B) Confounding by family socioeconomic status**",
+        "is_correct": false,
+        "response": "# Analysis of the Causal Claim\n\nThe policymaker observes a correlation: preschool attendance \u2192 higher adult earnings, and concludes causation: building preschools \u2192 higher earnings.\n\n**Identifying the threat:**\n\nThe key question is: *Why* do preschool attendees earn more? Is it because preschool causes higher earnings, or because something else explains both?\n\n**Evaluating each option:**\n\n- **(A) Sample size:** Doesn't explain why the correlation exists in the first place\n- **(C) Outdated content:** Irrelevant to whether the observed correlation is causal\n- **(D) Salaries vs. happiness:** Doesn't address causation; it's a measurement scope issue\n\n**(B) Confounding by family socioeconomic status:** This is the critical threat.\n\nWealthier families are more likely to:\n- Afford preschool\n- Provide other educational advantages\n- Have higher-earning parents (genetic/environmental factors)\n- Offer better nutrition, tutoring, etc.\n\nSo the correlation could reflect that **wealthy families both send children to preschool AND provide advantages that lead to higher earnings**\u2014not that preschool itself causes the earnings increase.\n\nSimply building more preschools won't help children from low-SES families gain these other advantages, so the policy may not produce the expected effect.\n\n**FINAL ANSWER: (B) Confounding by family socioeconomic status**"
+      },
+      "single_sonnet": {
+        "answer": "**(B) Confounding by family socioeconomic status**",
+        "is_correct": false,
+        "response": "## Analysis\n\nThe policymaker is making a **causal leap** from correlation (preschool attendance \u2192 higher adult earnings) to a policy recommendation.\n\n**Evaluating each option:**\n\n**(A) Sample size too small** - The question states studies \"consistently show\" this pattern, implying adequate replication and sample sizes. Not the primary threat.\n\n**(C) Preschool content is outdated** - This is speculative and doesn't address the causal inference problem itself.\n\n**(D) Only measured salaries not happiness** - This is a measurement scope issue, not a threat to the *causal* conclusion about earnings specifically.\n\n**(B) Confounding by family socioeconomic status** - This is the **classic confounding problem**: Wealthier, more educated families are both MORE LIKELY to send children to preschool AND more likely to provide advantages (nutrition, tutoring, networks, inheritance) that independently increase adult earnings. The observed correlation may reflect **selection bias** - children who attend preschool were already advantaged. Building more preschools won't replicate these background advantages.\n\nThis is a **spurious correlation** driven by a third variable (SES), making the causal conclusion invalid without controlling for it.\n\n## FINAL ANSWER: **(B) Confounding by family socioeconomic status**"
+      },
+      "homogeneous_haiku": {
+        "answer": "(B) CONFOUNDING BY FAMILY SOCIOECONOMIC STATUS**",
+        "is_correct": false,
+        "individual_answers": [
+          "(B) Confounding by family socioeconomic status**",
+          "(B) Confounding by family socioeconomic status**",
+          "(B) Confounding by family socioeconomic status**"
+        ],
+        "consensus": true
+      },
+      "heterogeneous_2h1s": {
+        "answer": "(B)**",
+        "is_correct": false,
+        "individual_answers": [
+          "(B)**",
+          "(B) Confounding by family socioeconomic status**",
+          "**(B) Confounding by family socioeconomic status**"
+        ],
+        "agent_models": [
+          "claude-haiku-4-5-20251001",
+          "claude-haiku-4-5-20251001",
+          "claude-sonnet-4-6"
+        ],
+        "consensus": false
+      },
+      "debate": {
+        "answer": "(B)**",
+        "is_correct": false,
+        "initial_answer": "(B)**",
+        "initial_correct": false,
+        "changed": false,
+        "critique_excerpt": "CRITIQUE: Answer appears correct.\n\nThe proposed answer correctly identifies (B) as the answer and provides sound reasoning. The core issue is confounding/selection bias: higher-SES families both send "
+      }
+    }
+  },
+  {
+    "question_id": 12,
+    "category": "causal_traps",
+    "question": "A study finds that people who sleep with their shoes on are more likely to wake up with a headache. What most likely explains this finding? Choose: (A) Shoes restrict blood flow causing headaches, (B) Both are caused by going to bed drunk, (C) Shoes cause psychological discomfort during sleep, (D) People who wear shoes to bed are generally unhealthier.",
+    "correct_answer": "B",
+    "conditions": {
+      "single_haiku": {
+        "answer": "(B)",
+        "is_correct": false,
+        "response": "Let me work through this systematically.\n\n**Identifying the correlation:** People who sleep with shoes on \u2192 more likely to have headaches upon waking.\n\n**Key insight:** This is a classic correlation vs. causation problem. I need to find what actually *causes* both behaviors, not assume shoes cause headaches.\n\n**Evaluating each option:**\n\n(A) \"Shoes restrict blood flow causing headaches\" - This assumes shoes are the direct cause. But shoes on feet wouldn't meaningfully restrict blood flow to the head. This is implausible mechanistically.\n\n(B) \"Both are caused by going to bed drunk\" - This is the most logical explanation. Someone who is intoxicated might:\n- Fall into bed without removing shoes (behavioral disinhibition)\n- Wake with a headache (hangover symptom)\nBoth are consequences of the same underlying cause (intoxication), not causally related to each other.\n\n(C) \"Psychological discomfort\" - Possible but less parsimonious than (B), and wouldn't explain why this specific group has headaches.\n\n(D) \"Generally unhealthier\" - Too vague and doesn't explain the specific mechanism.\n\n**The answer:** Option (B) identifies a confounding variable that explains both the shoe-wearing and the headaches, without requiring an implausible causal mechanism.\n\nFINAL ANSWER: (B)"
+      },
+      "single_sonnet": {
+        "answer": "**(B) Both are caused by going to bed drunk**",
+        "is_correct": false,
+        "response": "## Analysis\n\nLet me reason from first principles rather than accepting surface-level causal explanations.\n\n**The core question:** Why would shoe-wearing correlate with headaches?\n\n**Evaluating each option:**\n\n**(A) Shoes restrict blood flow causing headaches** - Shoes on feet restricting circulation to cause headaches is physiologically implausible as a primary mechanism.\n\n**(C) Psychological discomfort** - Possible, but speculative and weak as an explanation.\n\n**(D) Generally unhealthier people** - This is a correlation argument but vague and doesn't identify a specific mechanism.\n\n**(B) Both caused by going to bed drunk** - This is a **confounding variable** explanation. People who are intoxicated often fall asleep without removing their shoes AND alcohol causes dehydration/vasodilation leading to headaches. This single third variable elegantly explains BOTH observations simultaneously without requiring a direct causal link between shoes and headaches.\n\n**Key reasoning:** This is a classic **common cause/confounding variable** scenario. The correlation between shoes and headaches is spurious \u2014 neither causes the other. Alcohol (or intoxication) independently causes both behaviors.\n\nThis is the most parsimonious, mechanistically sound explanation.\n\n## FINAL ANSWER: **(B) Both are caused by going to bed drunk**"
+      },
+      "homogeneous_haiku": {
+        "answer": "(B)**",
+        "is_correct": false,
+        "individual_answers": [
+          "(B) Both are caused by going to bed drunk.",
+          "(B)**",
+          "(B)**"
+        ],
+        "consensus": false
+      },
+      "heterogeneous_2h1s": {
+        "answer": "(B)**",
+        "is_correct": false,
+        "individual_answers": [
+          "(B)**",
+          "(B)**",
+          "**(B)** Both are caused by going to bed drunk \u2014 alcohol intoxication is the common cause explaining both behaviors simultaneously."
+        ],
+        "agent_models": [
+          "claude-haiku-4-5-20251001",
+          "claude-haiku-4-5-20251001",
+          "claude-sonnet-4-6"
+        ],
+        "consensus": false
+      },
+      "debate": {
+        "answer": "(B)",
+        "is_correct": false,
+        "initial_answer": "(B)",
+        "initial_correct": false,
+        "changed": false,
+        "critique_excerpt": "CRITIQUE: Answer appears correct.\n\nThe proposed answer correctly identifies this as a classic confounding variable/common cause problem. Option (B) is indeed the best explanation because alcohol intox"
+      }
+    }
+  },
+  {
+    "question_id": 13,
+    "category": "logical_deception",
+    "question": "On an island, knights always tell the truth and knaves always lie. You meet two islanders, A and B. A says: 'We are both knaves.' What is A? Answer: KNIGHT or KNAVE.",
+    "correct_answer": "KNAVE",
+    "conditions": {
+      "single_haiku": {
+        "answer": "KNAVE",
+        "is_correct": true,
+        "response": "Let me work through this logically.\n\n**Assume A is a KNIGHT (truth-teller):**\n- If A is a knight, then A's statement \"We are both knaves\" must be true\n- But if A is a knight, then A is NOT a knave\n- This contradicts the statement being true\n- Therefore, A cannot be a knight\n\n**Assume A is a KNAVE (liar):**\n- If A is a knave, then A's statement \"We are both knaves\" must be false\n- For the statement to be false, it's not the case that both are knaves\n- Since A is a knave, B must NOT be a knave (i.e., B is a knight)\n- This is consistent: A lies, and the statement is indeed false\n\n**Verification:**\n- A is a knave (liar) \u2713\n- B is a knight (truth-teller) \u2713\n- A's statement \"We are both knaves\" is false \u2713\n- A, being a knave, correctly lies \u2713\n\nFINAL ANSWER: KNAVE"
+      },
+      "single_sonnet": {
+        "answer": "KNAVE",
+        "is_correct": true,
+        "response": "Let me reason through this carefully.\n\n**If A were a knight** (truth-teller):\n- A's statement \"We are both knaves\" would have to be true.\n- But A is a knight, so A cannot be a knave \u2014 contradiction.\n\n**If A were a knave** (liar):\n- A's statement \"We are both knaves\" would be false.\n- Since A is indeed a knave, for the statement to be false, B must NOT be a knave \u2014 meaning B is a knight.\n- A knave saying a false statement is consistent. \u2713\n\nThis works without contradiction.\n\nFINAL ANSWER: KNAVE"
+      },
+      "homogeneous_haiku": {
+        "answer": "KNAVE",
+        "is_correct": true,
+        "individual_answers": [
+          "KNAVE",
+          "KNAVE",
+          "KNAVE"
+        ],
+        "consensus": true
+      },
+      "heterogeneous_2h1s": {
+        "answer": "KNAVE",
+        "is_correct": true,
+        "individual_answers": [
+          "KNAVE",
+          "KNAVE",
+          "KNAVE"
+        ],
+        "agent_models": [
+          "claude-haiku-4-5-20251001",
+          "claude-haiku-4-5-20251001",
+          "claude-sonnet-4-6"
+        ],
+        "consensus": true
+      },
+      "debate": {
+        "answer": "KNAVE",
+        "is_correct": true,
+        "initial_answer": "KNAVE",
+        "initial_correct": true,
+        "changed": false,
+        "critique_excerpt": "CRITIQUE: Answer appears correct"
+      }
+    }
+  },
+  {
+    "question_id": 14,
+    "category": "logical_deception",
+    "question": "Three boxes are labeled 'Apples', 'Oranges', and 'Mixed'. All three labels are WRONG. You can draw one fruit from one box. You draw from the 'Mixed' box and get an apple. What does the 'Apples' box actually contain? Answer: APPLES, ORANGES, or MIXED.",
+    "correct_answer": "ORANGES",
+    "conditions": {
+      "single_haiku": {
+        "answer": "ORANGES",
+        "is_correct": true,
+        "response": "I need to work through this logically.\n\n**Given facts:**\n- Three boxes with labels: 'Apples', 'Oranges', 'Mixed'\n- ALL labels are wrong\n- I drew from 'Mixed' and got an apple\n\n**Step 1: What does 'Mixed' actually contain?**\n- The 'Mixed' label is wrong, so it doesn't contain mixed fruit\n- I drew an apple from it, so it contains only apples\n- Therefore: 'Mixed' box = APPLES\n\n**Step 2: What about the 'Apples' box?**\n- The 'Apples' label is wrong, so it doesn't contain apples\n- The remaining contents to distribute are: oranges and mixed\n- Since 'Mixed' box actually contains apples, the 'Apples' box must contain either oranges or the actual mixed fruit\n\n**Step 3: What about the 'Oranges' box?**\n- The 'Oranges' label is wrong, so it doesn't contain oranges\n- It must contain either apples or mixed\n- But we know 'Mixed' box contains apples\n- So 'Oranges' box must contain MIXED\n\n**Step 4: Back to 'Apples' box**\n- We've assigned: 'Mixed' = apples, 'Oranges' = mixed\n- The only remaining option is: 'Apples' = ORANGES\n\n**Verification:** All labels are wrong \u2713\n\nFINAL ANSWER: ORANGES"
+      },
+      "single_sonnet": {
+        "answer": "ORANGES**",
+        "is_correct": false,
+        "response": "## Step-by-Step Reasoning\n\n**Setup:** All labels are wrong.\n- Box labeled \"Mixed\" \u2260 Mixed\n- Box labeled \"Apples\" \u2260 Apples\n- Box labeled \"Oranges\" \u2260 Oranges\n\n**Key insight:** Since all labels are wrong, the \"Mixed\" box contains either only Apples or only Oranges (not mixed).\n\n**Drawing from \"Mixed\" box:** We get an apple. Since the box can't be Mixed (label is wrong), and we got an apple, it must contain **only Apples**.\n\n**Now assign remaining contents:**\n- \"Mixed\" box = Apples \u2713\n- Remaining contents to assign: Oranges and Mixed\n- \"Apples\" box cannot contain Apples (label wrong)\n- \"Oranges\" box cannot contain Oranges (label wrong)\n\nSo:\n- \"Apples\" box must contain **Mixed** (can't be Apples)\n- \"Oranges\" box must contain **Oranges**... wait, that violates the rule.\n\nLet me re-check:\n- \"Oranges\" box \u2260 Oranges \u2192 must contain **Mixed**... but Mixed is taken.\n- \"Apples\" box \u2260 Apples \u2192 must contain **Oranges**\n\nSo: \"Apples\" box = Oranges, \"Oranges\" box = Mixed. \u2713 Both labels are wrong. \u2713\n\n**FINAL ANSWER: ORANGES**"
+      },
+      "homogeneous_haiku": {
+        "answer": "ORANGES**",
+        "is_correct": false,
+        "individual_answers": [
+          "ORANGES**",
+          "ORANGES**",
+          "ORANGES**"
+        ],
+        "consensus": true
+      },
+      "heterogeneous_2h1s": {
+        "answer": "ORANGES**",
+        "is_correct": false,
+        "individual_answers": [
+          "ORANGES**",
+          "ORANGES**",
+          "ORANGES**"
+        ],
+        "agent_models": [
+          "claude-haiku-4-5-20251001",
+          "claude-haiku-4-5-20251001",
+          "claude-sonnet-4-6"
+        ],
+        "consensus": true
+      },
+      "debate": {
+        "answer": "ORANGES",
+        "is_correct": true,
+        "initial_answer": "ORANGES",
+        "initial_correct": true,
+        "changed": false,
+        "critique_excerpt": "CRITIQUE: Answer appears correct.\n\nThe logical deduction is sound. Since the 'Mixed' box yielded an apple and all labels are wrong, 'Mixed' must contain only apples. The 'Apples' box cannot contain ap"
+      }
+    }
+  }
+]

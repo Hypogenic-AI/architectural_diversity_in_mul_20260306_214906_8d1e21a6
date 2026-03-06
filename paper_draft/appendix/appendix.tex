@@ -1,0 +1,110 @@
+\section{Appendix}
+\label{sec:appendix}
+
+\subsection{Experimental Configuration}
+\label{app:config}
+
+\tabref{tab:hyperparams} lists the key hyperparameters used in all experiments.
+
+\begin{table}[h]
+\centering
+\caption{Experimental hyperparameters.}
+\label{tab:hyperparams}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Parameter & Value & Rationale \\
+\midrule
+Temperature        & 0.0    & Deterministic, reproducible results \\
+Max tokens         & 512    & Sufficient for chain-of-thought reasoning \\
+Retries            & 3      & Handle transient API errors \\
+Inter-call delay   & 0.3--0.5 s & Rate limit compliance \\
+Random seed        & 42     & Python random / numpy reproducibility \\
+Bootstrap samples  & 1000   & 95\% confidence interval estimation \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Benchmark Categories and Examples}
+\label{app:benchmark}
+
+\tabref{tab:benchmark_examples} provides representative examples from each
+category of \advbench.
+
+\begin{table}[h]
+\centering
+\caption{Representative examples from \advbench by category.
+The ``surface'' answer is the common incorrect response;
+the ``correct'' answer is the verified ground truth.}
+\label{tab:benchmark_examples}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lp{6.5cm}p{2cm}p{2cm}@{}}
+\toprule
+Category & Question (abbreviated) & Surface Answer & Correct Answer \\
+\midrule
+Misleading Math   &
+  Bat + ball = \$1.10; bat costs \$1 more. Ball price? &
+  \$0.10 &
+  \$0.05 \\
+Causal Traps      &
+  Hospital A: 2\% death rate, Hospital B: 1\% death rate. Choose B? &
+  Yes &
+  No (Simpson's paradox) \\
+Logical Deception &
+  Three switches, one bulb in another room. Identify controller. &
+  Trial and error &
+  Use heat as info \\
+Numerical Tricks  &
+  1\% have disease X; test is 99\% accurate. P(disease $|$ positive)? &
+  99\% &
+  $\approx$50\% (Bayes) \\
+Framing Effects   &
+  Surgery has 90\% survival rate. Recommend it? &
+  Yes &
+  Need clinical context \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\subsection{Debate Protocol Prompts}
+\label{app:prompts}
+
+The \debate condition uses three system prompts:
+
+\para{Proposer prompt (\haiku).}
+\begin{quote}
+\small
+You are a careful reasoner. Some questions contain misleading surface patterns
+designed to trick you. Identify these patterns and reason step-by-step to the
+correct answer. State your final answer clearly with ``FINAL ANSWER:'' at the end.
+\end{quote}
+
+\para{Critic prompt (\sonnet).}
+\begin{quote}
+\small
+You are a critical reviewer. Carefully evaluate the following answer for logical errors,
+incorrect assumptions, or missed insights. Point out specific flaws in the reasoning.
+If the answer is correct, say so clearly. Be concise and specific.
+\end{quote}
+
+\para{Reviser prompt (\haiku).}
+\begin{quote}
+\small
+You previously proposed an answer. You have now received a critique.
+Consider the critique carefully. If it reveals a genuine error, correct it.
+If you believe your original answer was correct, maintain it with justification.
+State your final revised answer with ``FINAL ANSWER:'' at the end.
+\end{quote}
+
+\subsection{Compute Resources}
+\label{app:compute}
+
+All experiments ran on CPU only (no GPU), Linux, 2 CPU cores.
+API latency was approximately 2--5 seconds per call.
+Total execution time was approximately 33 minutes (25 minutes for the main
+30-question experiment plus 8 minutes for the paraphrase set).
+An API key interruption at question~15 required resuming in a second session;
+results appeared consistent across both sessions.
+Total API calls: approximately 310
+(30 questions $\times$ $\approx$8 calls per question for all conditions,
+plus 6 paraphrase questions $\times$ $\approx$4 calls).

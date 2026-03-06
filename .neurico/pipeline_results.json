@@ -1,0 +1,27 @@
+{
+  "success": true,
+  "stages": {
+    "resource_finder": {
+      "success": true,
+      "completion_marker": "/workspaces/architectural_diversity_in_mul_20260306_214906_8d1e21a6/.resource_finder_complete",
+      "outputs": {
+        "literature_review": "/workspaces/architectural_diversity_in_mul_20260306_214906_8d1e21a6/literature_review.md",
+        "resources_catalog": "/workspaces/architectural_diversity_in_mul_20260306_214906_8d1e21a6/resources.md",
+        "papers_dir": "/workspaces/architectural_diversity_in_mul_20260306_214906_8d1e21a6/papers",
+        "datasets_dir": "/workspaces/architectural_diversity_in_mul_20260306_214906_8d1e21a6/datasets",
+        "code_dir": "/workspaces/architectural_diversity_in_mul_20260306_214906_8d1e21a6/code"
+      },
+      "log_file": "/workspaces/architectural_diversity_in_mul_20260306_214906_8d1e21a6/logs/resource_finder_claude.log",
+      "transcript_file": "/workspaces/architectural_diversity_in_mul_20260306_214906_8d1e21a6/logs/resource_finder_claude_transcript.jsonl",
+      "elapsed_time": 974.1413865089417
+    },
+    "experiment_runner": {
+      "success": true,
+      "return_code": 0,
+      "elapsed_time": 2818.2135467529297,
+      "log_file": "/workspaces/architectural_diversity_in_mul_20260306_214906_8d1e21a6/logs/execution_claude.log",
+      "transcript_file": "/workspaces/architectural_diversity_in_mul_20260306_214906_8d1e21a6/logs/execution_claude_transcript.jsonl"
+    }
+  },
+  "work_dir": "/workspaces/architectural_diversity_in_mul_20260306_214906_8d1e21a6"
+}

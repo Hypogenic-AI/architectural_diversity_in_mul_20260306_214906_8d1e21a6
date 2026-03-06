@@ -1,0 +1,81 @@
+\section{Related Work}
+\label{sec:related}
+
+\para{Multi-agent LLM debate.}
+\citet{du2023debate} establish the foundational ``society of minds'' paradigm,
+where multiple instances of the same LLM propose, debate, and update answers over
+multiple rounds. They show that homogeneous multi-agent debate improves mathematical
+reasoning on GSM8K by 11\% over single models and scales with agent count.
+Critically, they identify that RLHF-trained agents are ``agreeable''---they readily
+accept critiques even when originally correct---a finding directly relevant to
+our debate condition.
+\citet{liang2023mad} identify the ``Degeneration-of-Thought'' problem: once an LLM
+establishes high confidence, single-model self-reflection fails to generate novel
+reasoning. Their Multi-Agent Debate (MAD) framework uses two adversarial agents
+managed by a judge and improves counter-intuitive arithmetic reasoning.
+Building on these works, we study debate between agents of \emph{different capability levels},
+rather than multiple instances of the same model.
+
+\para{Heterogeneous model ensembles.}
+\citet{chen2023reconcile} introduce \textsc{ReConcile}, the first round-table discussion
+framework using genuinely heterogeneous models (GPT-3.5, PaLM-2, Claude).
+They demonstrate that diversity across model families is critical to superior
+performance (+11.4\% on CommonsenseQA over best baselines) and introduce
+confidence-weighted voting for consensus.
+Unlike \citet{chen2023reconcile}, we focus specifically on \emph{within-family}
+capability diversity (small vs.\ large variants of the same model), controlling
+for provider-level differences to isolate the effect of model scale.
+\citet{wu2023heterogeneous} provide the theoretical foundation through
+negative correlation learning analysis, showing that heterogeneous deep ensembles
+with high diversity boost adversarial robustness in computer vision.
+We apply this theoretical lens to LLM ensembles and measure pairwise error
+correlation directly.
+
+\para{Scaling and voting in homogeneous ensembles.}
+\citet{li2024moreagents} show that LLM performance scales monotonically with
+agent count in a sampling-and-voting (Agent Forest) framework,
+even for homogeneous ensembles.
+The improvement is stronger on harder tasks.
+This work provides an important baseline: any claimed benefit of diversity
+must exceed what is achievable by simply scaling homogeneous sampling.
+In our study, we control for agent count (three agents per ensemble condition)
+to isolate diversity effects from scale effects.
+
+\para{Diversity metrics and ensemble optimization.}
+\citet{tekin2024topla} introduce the focal diversity metric for quantifying
+diversity-performance correlation in LLM ensembles and propose
+diversity-optimized pruning to select the top-performing sub-ensemble.
+Their \textsc{LLM-TOPLA} framework achieves +2.2\% on MMLU over strong baselines
+by selecting diverse sub-ensembles.
+We adopt their conceptual framework of measuring pairwise error correlation
+as a diversity index but evaluate it in the context of capability-level
+rather than cross-architecture diversity.
+
+\para{Challenges to the diversity hypothesis.}
+\citet{rosales2025diverse} present the most direct challenge to our hypothesis:
+they show that question interpretation diversity (rephrasing the question for a
+single model) often outperforms model diversity across GPT and Llama families
+on BoolQ, StrategyQA, and PubMedQA.
+Their key insight---that model diversity benefits only when models have
+\emph{complementary failure modes}, not just independent errors---motivates
+our investigation into whether within-family models share failure modes
+due to shared safety alignment.
+
+\para{Controlled studies of debate factors.}
+\citet{wu2025debate} conduct a controlled study of multi-agent debate using
+Knight-Knave-Spy logical puzzles with verifiable ground truth.
+They find that group diversity and intrinsic reasoning strength dominate
+debate outcomes, while structural parameters (order, confidence visibility)
+offer minimal gains.
+Diverse teams overturn incorrect consensus while homogeneous teams create
+echo chambers.
+This finding motivates our investigation of whether capability diversity
+(small vs.\ large within the same family) translates to the kind of beneficial
+debate diversity observed with cross-family models.
+
+\para{Positioning.}
+Unlike prior work, we specifically target the \emph{within-family capability diversity}
+question with a custom adversarial benchmark designed to expose shared failure modes,
+and we measure both accuracy and pairwise error correlation.
+This provides complementary evidence to the cross-family results of
+\citet{chen2023reconcile} and the cross-model debate results of \citet{wu2025debate}.
